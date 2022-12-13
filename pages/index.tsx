@@ -1,4 +1,5 @@
 import { useForm, SubmitHandler } from "react-hook-form";
+import Clock from 'react-live-clock'
 
 interface Inputs {
   states: [],
@@ -26,14 +27,21 @@ export default function Home() {
         className="relative mt-24 space-y-8 rounded bg-black/75 py-10 px-6 md:mt-0 md:max-w-md md:px-14"
         onSubmit={handleSubmit(onSubmit)}
       >
-        <h1 className="text-4xl font-semibold">Add your notes here</h1>
+        <h1 className="text-4xl">Add your notes here</h1>
         <div className="space-y-4">
-  
+          <div>
+            <Clock
+              format={'h:mm:ssa'}
+              className="text-xl"
+              ticking={true} />
+          </div>
+
+
           <fieldset>
-            <legend>Check applicable states</legend>
+            <legend>Check the states applicable to you</legend>
             {
               states.map(
-                (c,i) => <div className="flex w-full items-center"><label key={c}><input className="mx-2" type="checkbox" value={c} {...register('states')} />{c}</label></div>
+                (c, i) => <div className="flex w-full items-center"><label key={c}><input className="mx-2" type="checkbox" value={c} {...register('states')} />{c}</label></div>
               )
             }
           </fieldset>
