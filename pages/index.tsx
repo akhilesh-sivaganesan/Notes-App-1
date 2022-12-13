@@ -1,6 +1,7 @@
 import { useForm, SubmitHandler } from "react-hook-form";
 
 interface Inputs {
+  states: [],
   location: String,
   thoughts: String,
   reminders: String,
@@ -16,10 +17,10 @@ export default function Home() {
     console.log(data)
   }
 
-  //const states = ["Clear", "Temperature", "Hydration", "Hunger", "Skin Health"]
+  const states = ["Energized", "Clear-minded", "Hydrated", "Still", "Easy", "Physically Cool"]
 
   return (
-    <div className="relative flex h-screen w-[95vw] flex-col md:items-left md:justify-center">
+    <div className="relative flex w-[95vw] flex-col md:items-left md:justify-center">
 
       <form
         className="relative mt-24 space-y-8 rounded bg-black/75 py-10 px-6 md:mt-0 md:max-w-md md:px-14"
@@ -27,19 +28,16 @@ export default function Home() {
       >
         <h1 className="text-4xl font-semibold">Add your notes here</h1>
         <div className="space-y-4">
-          {
-            /*
-            <fieldset style={{float: 'left'}}>
-            <legend>With the same name</legend>
+  
+          <fieldset>
+            <legend>Check applicable states</legend>
             {
               states.map(
-                (c,i) => <label key={c}><input type="checkbox" value={c} {...register()} />{c}</label>
+                (c,i) => <div className="flex w-full items-center"><label key={c}><input className="mx-2" type="checkbox" value={c} {...register('states')} />{c}</label></div>
               )
             }
           </fieldset>
-            */
-          }
-          
+
           <p>Where are you?</p>
           <label className="inline-block w-full">
             <input
