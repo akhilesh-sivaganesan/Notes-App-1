@@ -28,3 +28,9 @@ a {
     background: black;
   }
 }
+
+@layer components {
+  .input {
+      @apply w-full rounded bg-[#333333] px-5 py-3.5 placeholder-[gray] outline-none focus:bg-[#454545];
+  }
+}
