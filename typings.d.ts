@@ -23,3 +23,8 @@ export interface Todo {
     completion: Boolean,
     task: String
 }
+
+export interface TodoInputs {
+    completion: Boolean,
+    task: String
+}
