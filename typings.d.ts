@@ -8,8 +8,8 @@ export interface Inputs {
 }
 
 export interface Snapshot {
-    id: Number,
-    todoList: []
+    time: Date,
+    todoList: [],
     states: [],
     location: String,
     thoughts: String,

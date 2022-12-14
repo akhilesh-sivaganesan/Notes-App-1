@@ -1,12 +1,19 @@
 import { useForm, SubmitHandler } from "react-hook-form";
 import Clock from 'react-live-clock'
-import { Inputs } from '../typings'
-
+import { Inputs, Snapshot } from '../typings'
+import { useRecoilState, useRecoilValue } from "recoil"
+import { snapshotListState, todoListState } from "../atoms/recoil_state";
+import {useState, useEffect } from 'react';
 export default function Form() {
 
   const { register, handleSubmit, watch, formState: { errors } } = useForm<Inputs>();
-  const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    console.log(data)
+  const [snapshotList, setSnapshotList] = useRecoilState<Snapshot[]>(snapshotListState);
+  const todoList = useRecoilValue(todoListState)
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {    
+    let snap = JSON.parse(JSON.stringify(data))
+    snap.todoList = [...todoList]
+    snap.time = new Date()
+    setSnapshotList([...snapshotList, snap as Snapshot])
   }
 
   const states = ["Energized", "Clear-minded", "Hydrated", "Still", "Easy", "Physically Cool"]
@@ -20,19 +27,27 @@ export default function Form() {
       >
         <h1 className="text-4xl">Add your notes here</h1>
         <div className="space-y-4">
-          <div>
+          {
+            /*
+            <div>
             <Clock
               format={'h:mm:ssa'}
               className="text-xl"
               ticking={true} />
           </div>
+            */
+          }
 
+            <Clock
+              format={'h:mm'}
+              className="text-xl"
+              ticking={true} />
 
           <fieldset>
             <legend>Check the states applicable to you</legend>
             {
               states.map(
-                (c, i) => <div className="flex w-full items-center"><label key={c}><input className="mx-2" type="checkbox" value={c} {...register('states')} />{c}</label></div>
+                (c, i) => <div className="flex w-full items-center"><label key={i}><input className="mx-2" type="checkbox" value={c} {...register('states')} />{c}</label></div>
               )
             }
           </fieldset>
