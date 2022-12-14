@@ -19,8 +19,8 @@ export interface Snapshot {
 }
 
 export interface Todo {
-    id: Number,
-    completion: Boolean,
+    id: number,
+    completion: boolean,
     task: String
 }
 

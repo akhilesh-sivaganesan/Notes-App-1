@@ -1,10 +1,12 @@
 import { Todo, TodoInputs } from '../typings'
 import { useRecoilState, useRecoilValue } from "recoil"
-import { todoListState, todoIDState} from "../atoms/recoil_state";
+import { todoListState, todoIDState } from "../atoms/recoil_state";
 import TodoItem from './TodoItem';
-import { TextField, Button } from "@mui/material"
+import { TextField, Button, Typography } from "@mui/material"
 import { useState } from 'react'
 import { useForm, SubmitHandler } from "react-hook-form";
+import { darkTheme } from "../styles/themes";
+import { ThemeProvider, CssBaseline } from "@mui/material";
 
 export default function TodoList() {
     const { register, handleSubmit, watch, formState: { errors } } = useForm<TodoInputs>();
@@ -14,7 +16,7 @@ export default function TodoList() {
     const [errorMessage, setErrorMessage] = useState("")
     const [value, setValue] = useState("")
 
-    const onSubmit: SubmitHandler<TodoInputs> = async (data) => {    
+    const onSubmit: SubmitHandler<TodoInputs> = async (data) => {
         const todoObj = JSON.parse(JSON.stringify(data))
         todoObj.completion = false;
         todoObj.id = todoID;
@@ -22,53 +24,31 @@ export default function TodoList() {
         setTodoList([...todoList, todoObj as Todo])
     }
 
-    function handleChange (event: React.ChangeEvent<HTMLInputElement>) {
+    function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
         setValue(event.target.value)
     }
 
-    /*
-    function on(event) {
-        //If valid input then
-        
-        if (this.state.value === "") {
-            this.setState({error: true})
-            this.setState({errorMessage: "Enter valid task"})
-            event.preventDefault();
-            return;
-        }
-        taskID++;
-        const taskObj = {
-            taskName: this.state.value,
-            done: false,
-            id: taskID
-        }
-        this.props.parentCallback(taskObj);
-
-        this.setState({error: false});
-        this.setState({value: ""});
-        this.setState({errorMessage: ""});
-
-        document.getElementById("taskInput").value = '';
-        event.preventDefault();
-        
-    }
-    */
     return (
-        <>
-            {
-                todoList.map(
-                    (t, i) => <TodoItem key={i} id={t.id} completion={t.completion} task={t.task} />
-                )
-            }
-            <div>
-                <form className="flex flex-row" onSubmit={handleSubmit(onSubmit)}>
-                    <TextField helperText={errorMessage} error={error} id="taskInput" type="text" placeholder="Enter Task" defaultValue={value} 
-                    {...register('task', { required: true })}
-                    onChange={handleChange}
-                    />
-                    <Button type="submit" value="Submit">Submit</Button>
-                </form>
+        <ThemeProvider theme={darkTheme}>
+            <CssBaseline />
+            <div className="relative flex flex-col md:items-left  py-10 space-y-8">
+                <h1 className="text-4xl">To Do List</h1>
+                {
+                    todoList.map(
+                        (t, i) => <TodoItem key={i} id={t.id} completion={t.completion} task={t.task} />
+                    )
+                }
+                <div>
+                    <form className="flex flex-row space-x-2 justify-center" onSubmit={handleSubmit(onSubmit)}>
+                        <TextField helperText={errorMessage} error={error} id="taskInput" type="text" placeholder="Enter Task" defaultValue={value}
+                            {...register('task', { required: true })}
+                            onChange={handleChange}
+                        />
+                        <Button type="submit" value="Submit">Submit</Button>
+                    </form>
+                </div>
             </div>
-        </>
+        </ThemeProvider>
+
     )
 }

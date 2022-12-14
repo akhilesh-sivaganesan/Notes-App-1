@@ -3,8 +3,8 @@ import TodoList from "../components/TodoList";
 
 export default function Home() {
   return (
-    <div>
-      <Form />
+    <div className="flex flex-row flex-wrap">
+      <Form/>
       <TodoList />
     </div>
   )

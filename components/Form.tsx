@@ -19,7 +19,7 @@ export default function Form() {
   const states = ["Energized", "Clear-minded", "Hydrated", "Still", "Easy", "Physically Cool"]
 
   return (
-    <div className="relative flex flex-col md:items-left md:justify-center">
+    <div className="relative flex flex-col justify-start">
 
       <form
         className="relative mt-24 space-y-8 rounded bg-black/75 py-10 px-6 md:mt-0 md:max-w-md md:px-14"

@@ -9,19 +9,7 @@ export const snapshotListState = atom({
 
 export const todoListState = atom({
     key: "todoListState",
-    default: [{
-        id: 1,
-        completion: false,
-        task: "Default task"
-    }, {
-        id: 2,
-        completion: true,
-        task: "2 task"
-    }, {
-        id: 3,
-        completion: false,
-        task: "3 task"
-    }] as Todo[],
+    default: [] as Todo[],
 })
 
 export const todoIDState = atom({
