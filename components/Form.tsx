@@ -2,17 +2,21 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import Clock from 'react-live-clock'
 import { Inputs, Snapshot } from '../typings'
 import { useRecoilState, useRecoilValue } from "recoil"
-import { snapshotListState, todoListState } from "../atoms/recoil_state";
+import { snapshotListState, todoListState, snapshotIDState } from "../atoms/recoil_state";
 import {useState, useEffect } from 'react';
 export default function Form() {
 
   const { register, handleSubmit, watch, formState: { errors } } = useForm<Inputs>();
   const [snapshotList, setSnapshotList] = useRecoilState<Snapshot[]>(snapshotListState);
+  const [snapshotID, setSnapshotID] = useRecoilState<number>(snapshotIDState);
+
   const todoList = useRecoilValue(todoListState)
   const onSubmit: SubmitHandler<Inputs> = async (data) => {    
     let snap = JSON.parse(JSON.stringify(data))
     snap.todoList = [...todoList]
     snap.time = new Date()
+    snap.id = snapshotID
+    setSnapshotID(snapshotID + 1)
     setSnapshotList([...snapshotList, snap as Snapshot])
   }
 

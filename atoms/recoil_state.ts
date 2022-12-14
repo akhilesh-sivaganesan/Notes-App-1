@@ -16,3 +16,18 @@ export const todoIDState = atom({
     key: "todoIDState",
     default: 0 as number
 })
+
+export const snapshotIDState = atom({
+    key: "snapshotIDState",
+    default: 0 as number
+})
+
+export const modalState = atom({
+    key: 'modalState',
+    default: false,
+})
+
+export const snapshotState = atom<Snapshot | null>({
+    key: "snapshotState",
+    default: null
+})

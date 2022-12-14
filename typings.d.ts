@@ -8,6 +8,7 @@ export interface Inputs {
 }
 
 export interface Snapshot {
+    id: number,
     time: Date,
     todoList: [],
     states: [],

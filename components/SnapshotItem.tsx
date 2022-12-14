@@ -4,9 +4,11 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
+import { useRecoilState } from "recoil";
+import { modalState, snapshotListState, snapshotState } from "../atoms/recoil_state";
 
 export default function SnapshotItem(
-    { time,
+    { id, time,
         todoList,
         states,
         location,
@@ -15,10 +17,18 @@ export default function SnapshotItem(
         unexpected,
         foresight,
     }: Snapshot) {
+    const [showModal, setShowModal] = useRecoilState<boolean>(modalState)
+    const [snapshot, setSnapshot] = useRecoilState<Snapshot | null>(snapshotState)
+    const [snapshotList, setSnapshotList] = useRecoilState<Snapshot[]>(snapshotListState)
+
+    function handleClick() {
+        setSnapshot(snapshotList.find(o => o.id === id) || null)
+        setShowModal(true)
+    }
     return (
         <div>
             <Card sx={{ maxWidth: 345 }}>
-                <CardActionArea>
+                <CardActionArea onClick={handleClick}>
                     <CardMedia
                         component="img"
                         height="140"
