@@ -31,7 +31,7 @@ export default function TodoList() {
     return (
         <ThemeProvider theme={darkTheme}>
             <CssBaseline />
-            <div className="relative flex flex-col md:items-left  py-10 space-y-8">
+            <div className="flex flex-col md:items-left items-center py-10 space-y-8">
                 <h1 className="text-4xl">To Do List</h1>
                 {
                     todoList.map(
