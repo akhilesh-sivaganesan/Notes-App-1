@@ -24,3 +24,7 @@ export const todoListState = atom({
     }] as Todo[],
 })
 
+export const todoIDState = atom({
+    key: "todoIDState",
+    default: 0 as number
+})

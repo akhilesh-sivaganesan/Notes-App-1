@@ -1,6 +1,6 @@
 import { Todo, TodoInputs } from '../typings'
 import { useRecoilState, useRecoilValue } from "recoil"
-import { todoListState } from "../atoms/recoil_state";
+import { todoListState, todoIDState} from "../atoms/recoil_state";
 import TodoItem from './TodoItem';
 import { TextField, Button } from "@mui/material"
 import { useState } from 'react'
@@ -9,12 +9,17 @@ import { useForm, SubmitHandler } from "react-hook-form";
 export default function TodoList() {
     const { register, handleSubmit, watch, formState: { errors } } = useForm<TodoInputs>();
     const [todoList, setTodoList] = useRecoilState<Todo[]>(todoListState);
+    const [todoID, setTodoID] = useRecoilState<number>(todoIDState)
     const [error, setError] = useState(false)
     const [errorMessage, setErrorMessage] = useState("")
     const [value, setValue] = useState("")
 
     const onSubmit: SubmitHandler<TodoInputs> = async (data) => {    
-        console.log(data)
+        const todoObj = JSON.parse(JSON.stringify(data))
+        todoObj.completion = false;
+        todoObj.id = todoID;
+        setTodoID(todoID + 1)
+        setTodoList([...todoList, todoObj as Todo])
     }
 
     function handleChange (event: React.ChangeEvent<HTMLInputElement>) {
