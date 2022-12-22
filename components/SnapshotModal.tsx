@@ -2,14 +2,14 @@ import MuiModal from "@mui/material/Modal"
 import XMarkIcon from '@heroicons/react/24/outline/XMarkIcon'
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { Snapshot } from '../typings'
-import { modalState, snapshotState } from "../atoms/recoil_state"
+import { snapshotModalState, snapshotState } from "../atoms/recoil_state"
 import { useEffect, useState } from "react";
 import { FaPlay } from "react-icons/fa";
 import { HandThumbUpIcon, PlusIcon } from "@heroicons/react/24/outline";
 
 
 function Modal() {
-    const [showModal, setShowModal] = useRecoilState(modalState)
+    const [showModal, setShowModal] = useRecoilState(snapshotModalState)
     const [snapshot, setSnapshot] = useRecoilState<Snapshot | null>(snapshotState)
 
     const handleClose = () => {

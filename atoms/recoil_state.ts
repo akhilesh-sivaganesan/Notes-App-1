@@ -22,8 +22,8 @@ export const snapshotIDState = atom({
     default: 0 as number
 })
 
-export const modalState = atom({
-    key: 'modalState',
+export const snapshotModalState = atom({
+    key: 'snapshotModalState',
     default: false,
 })
 

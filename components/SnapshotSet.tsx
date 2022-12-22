@@ -14,7 +14,7 @@ export default function SnapshotSet() {
                 {
                     snapshotList.map(
                         (s, i) =>
-                            <Grid item xs={9} md={5}>
+                            <Grid item xs={9} md={4}>
                                 <SnapshotItem key={i} id={s.id} time={s.time} todoList={s.todoList} states={s.states}
                                     location={s.location}
                                     thoughts={s.thoughts}

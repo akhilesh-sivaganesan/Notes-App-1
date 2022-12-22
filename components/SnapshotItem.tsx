@@ -5,7 +5,7 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
 import { useRecoilState } from "recoil";
-import { modalState, snapshotListState, snapshotState } from "../atoms/recoil_state";
+import { snapshotModalState, snapshotListState, snapshotState } from "../atoms/recoil_state";
 
 export default function SnapshotItem(
     { id, time,
@@ -17,7 +17,7 @@ export default function SnapshotItem(
         unexpected,
         foresight,
     }: Snapshot) {
-    const [showModal, setShowModal] = useRecoilState<boolean>(modalState)
+    const [showModal, setShowModal] = useRecoilState<boolean>(snapshotModalState)
     const [snapshot, setSnapshot] = useRecoilState<Snapshot | null>(snapshotState)
     const [snapshotList, setSnapshotList] = useRecoilState<Snapshot[]>(snapshotListState)
 

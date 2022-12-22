@@ -51,7 +51,7 @@ export default function Form() {
             <legend>Check the states applicable to you</legend>
             {
               states.map(
-                (c, i) => <div className="flex w-full items-center"><label key={i}><input className="mx-2" type="checkbox" value={c} {...register('states')} />{c}</label></div>
+                (c, i) => <div key={i} className="flex w-full items-center"><label><input className="mx-2" type="checkbox" value={c} {...register('states')} />{c}</label></div>
               )
             }
           </fieldset>
