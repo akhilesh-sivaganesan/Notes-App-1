@@ -1,5 +1,5 @@
 import { atom } from 'recoil';
-import {Snapshot, Todo, Inputs} from "../typings";
+import {Snapshot, Todo, Activity} from "../typings";
 
 
 export const snapshotListState = atom({
@@ -12,6 +12,11 @@ export const todoListState = atom({
     default: [] as Todo[],
 })
 
+export const activityListState = atom({
+    key: "activityListState",
+    default: [] as Activity[],
+})
+
 export const todoIDState = atom({
     key: "todoIDState",
     default: 0 as number
@@ -22,6 +27,11 @@ export const snapshotIDState = atom({
     default: 0 as number
 })
 
+export const activityIDState = atom({
+    key: "activityIDState",
+    default: 0 as number
+})
+
 export const snapshotModalState = atom({
     key: 'snapshotModalState',
     default: false,
@@ -29,5 +39,15 @@ export const snapshotModalState = atom({
 
 export const snapshotState = atom<Snapshot | null>({
     key: "snapshotState",
+    default: null
+})
+
+export const activityModalState = atom({
+    key: 'activityModalState',
+    default: false,
+})
+
+export const activityState = atom<Activity | null>({
+    key: "activityState",
     default: null
 })

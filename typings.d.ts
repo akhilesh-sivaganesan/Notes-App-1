@@ -29,3 +29,18 @@ export interface TodoInputs {
     completion: Boolean,
     task: String
 }
+
+export interface Activity {
+    id: number,
+    startTime: Date,
+    endTime: Date,
+    title: string,
+    actionList: []
+}
+
+export interface Action {
+    predicted ?: string,
+    startTime ?: Date,
+    endTime ?: Date,
+    actual: string,
+}

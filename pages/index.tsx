@@ -1,7 +1,9 @@
 import Form from "../components/Form";
 import TodoList from "../components/TodoList";
 import SnapshotSet from "../components/SnapshotSet"
-import Modal from "../components/SnapshotModal";
+import SnapshotModal from "../components/SnapshotModal";
+import ActivityModal from "../components/ActivityModal";
+import ActivitySet from "../components/ActivitySet";
 import { Container, Grid } from "@mui/material"
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
@@ -11,7 +13,7 @@ import { useState } from "react";
 import TabPanel from "../components/TabPanel";
 import { ThemeProvider, CssBaseline } from "@mui/material";
 import { darkTheme } from "../styles/themes";
-import { snapshotModalState } from "../atoms/recoil_state";
+import { activityModalState, snapshotModalState } from "../atoms/recoil_state";
 import { useRecoilState } from "recoil";
 
 function a11yProps(index: number) {
@@ -42,7 +44,17 @@ export default function Home() {
             </Tabs>
           </Box>
           <TabPanel value={value} index={0}>
-            <TodoList />
+            <Grid container spacing={4}>
+              <Grid item xs={12} md={4}>
+                <TodoList />
+              </Grid>
+              <Grid item xs={12} md={8}>
+                <ActivitySet />
+              </Grid>
+              <Grid item xs={12} md={6}>
+                {activityModalState && <ActivityModal />}
+              </Grid>
+            </Grid>
           </TabPanel>
           <TabPanel value={value} index={1}>
             <Grid container spacing={4}>
@@ -53,7 +65,7 @@ export default function Home() {
                 <SnapshotSet />
               </Grid>
               <Grid item xs={12} md={6}>
-                {showModal && <Modal/>}
+                {showModal && <SnapshotModal />}
               </Grid>
             </Grid>
           </TabPanel>

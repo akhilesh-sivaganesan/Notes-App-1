@@ -6,7 +6,6 @@ import { TextField, Button, Typography } from "@mui/material"
 import { useState } from 'react'
 import { useForm, SubmitHandler } from "react-hook-form";
 import { darkTheme } from "../styles/themes";
-import { ThemeProvider, CssBaseline } from "@mui/material";
 
 export default function TodoList() {
     const { register, handleSubmit, watch, formState: { errors } } = useForm<TodoInputs>();
@@ -29,26 +28,23 @@ export default function TodoList() {
     }
 
     return (
-        <ThemeProvider theme={darkTheme}>
-            <CssBaseline />
-            <div className="flex flex-col md:items-left items-center py-10 space-y-8">
-                <h1 className="text-4xl">To Do List</h1>
-                {
-                    todoList.map(
-                        (t, i) => <TodoItem key={i} id={t.id} completion={t.completion} task={t.task} />
-                    )
-                }
-                <div>
-                    <form className="flex flex-row space-x-2 justify-center" onSubmit={handleSubmit(onSubmit)}>
-                        <TextField helperText={errorMessage} error={error} id="taskInput" type="text" placeholder="Enter Task" defaultValue={value}
-                            {...register('task', { required: true })}
-                            onChange={handleChange}
-                        />
-                        <Button type="submit" value="Submit">Submit</Button>
-                    </form>
-                </div>
+        <div className="flex flex-col md:items-left items-center py-10 space-y-8">
+            <h1 className="text-4xl">To Do List</h1>
+            {
+                todoList.map(
+                    (t, i) => <TodoItem key={i} id={t.id} completion={t.completion} task={t.task} />
+                )
+            }
+            <div>
+                <form className="flex flex-row space-x-2 justify-center" onSubmit={handleSubmit(onSubmit)}>
+                    <TextField helperText={errorMessage} error={error} id="taskInput" type="text" placeholder="Enter Task" defaultValue={value}
+                        {...register('task', { required: true })}
+                        onChange={handleChange}
+                    />
+                    <Button type="submit" value="Submit">Submit</Button>
+                </form>
             </div>
-        </ThemeProvider>
+        </div>
 
     )
 }
