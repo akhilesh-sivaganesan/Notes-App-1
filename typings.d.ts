@@ -7,6 +7,12 @@ export interface Inputs {
     foresight: String,
 }
 
+export interface ActivityInputs {
+    actionList: {title: string}[],
+    title: string,
+    notes: string,
+}
+
 export interface Snapshot {
     id: number,
     time: Date,
@@ -35,12 +41,20 @@ export interface Activity {
     startTime: Date,
     endTime: Date,
     title: string,
-    actionList: []
+    notes: string,
+    actionList: Action[],
 }
 
 export interface Action {
-    predicted ?: string,
+    id: number,
+    title: string,
+    predicted ?: Step[],
     startTime ?: Date,
     endTime ?: Date,
-    actual: string,
+    actual: Step[],
+}
+
+export interface Step {
+    id: number,
+    content: string,
 }

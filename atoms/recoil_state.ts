@@ -32,6 +32,16 @@ export const activityIDState = atom({
     default: 0 as number
 })
 
+export const actionIDState = atom({
+    key: "actionIDState",
+    default: 0 as number
+})
+
+export const stepIDState = atom({
+    key: "stepIDState",
+    default: 0 as number
+})
+
 export const snapshotModalState = atom({
     key: 'snapshotModalState',
     default: false,
