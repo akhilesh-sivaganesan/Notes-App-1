@@ -1,4 +1,4 @@
-import { Todo, Activity } from "../typings"
+import { Todo, Activity, Action } from "../typings"
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
@@ -30,7 +30,7 @@ export default function TodoItem({ id, completion, task }: Todo) {
     function handleEngagement() {
         //Create new activity for from this todo
         //set this todo description as the title
-        const activityObj = {id: activityID, title: task, startTime: new Date(), actionList: []};
+        const activityObj = {id: activityID, title: task, startTime: new Date(), actionList: [] as Action[], endTime: new Date(), notes: ""};
         setActivityID(activityID + 1)
         setActivityList([...activityList, activityObj as Activity])
         setActivity(activityList.find(o => o.id === activityObj.id) || null)

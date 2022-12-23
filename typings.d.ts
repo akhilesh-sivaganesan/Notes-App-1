@@ -8,7 +8,7 @@ export interface Inputs {
 }
 
 export interface ActivityInputs {
-    actionList: {title: string}[],
+    actionList: {name: string, actualSteps: {content: string}[]}[],
     title: string,
     notes: string,
 }
@@ -47,7 +47,7 @@ export interface Activity {
 
 export interface Action {
     id: number,
-    title: string,
+    name: string,
     predicted ?: Step[],
     startTime ?: Date,
     endTime ?: Date,

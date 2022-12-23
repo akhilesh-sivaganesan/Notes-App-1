@@ -6,25 +6,28 @@ import { actionIDState, activityModalState, activityState } from "../atoms/recoi
 import { FaPlay } from "react-icons/fa";
 import { HandThumbUpIcon, PlusIcon } from "@heroicons/react/24/outline";
 import { useForm, useFieldArray, SubmitHandler } from "react-hook-form";
+import StepSet from "./StepSet";
 
+const defaultValues = {
+    title: "Some Activity Title",
+    notes: "Some Activity Notes",
+    actionList: [
+        {
+            name: "Some Action Name 1",
+            actualSteps: [{ content: "some step content 1" }, { content: "some step content 2" }]
+        },
+        {
+            name: "Some Action Name 2",
+            actualSteps: [{ content: "some step content 1" }, { content: "some step content 2" }]
+        },
+    ]
+};
 
 function Modal() {
     const [showActivityModal, setShowActivityModal] = useRecoilState(activityModalState)
     const [activity, setActivity] = useRecoilState<Activity | null>(activityState)
     const [actionID, setActionID] = useRecoilState<number>(actionIDState)
-    const {
-        register,
-        control,
-        handleSubmit,
-        formState: { errors }
-    } = useForm<ActivityInputs>({
-        defaultValues: {
-            actionList: [{
-                title: "First Action",
-            }]
-        },
-        mode: "onBlur"
-    });
+    const { getValues, reset, setValue, register, control, handleSubmit, formState: { errors } } = useForm<ActivityInputs>({ defaultValues });
 
     const { fields, append, remove } = useFieldArray({
         name: "actionList",
@@ -37,8 +40,6 @@ function Modal() {
     }
 
     const onSubmit: SubmitHandler<ActivityInputs> = async (data) => {
-        //What is the format of inputs entered int he form
-        //There are a set of actions each with a set of steps
         console.log(data)
     }
 
@@ -52,7 +53,13 @@ function Modal() {
                 >
                     <XMarkIcon className="h-6 w-6" />
                 </button>
-                <h1 className="text-4xl">{activity?.title}</h1>
+                {
+                    /*
+                <input className="text-4xl" {...register(`title`)}>{activity?.title}</input>
+
+                    */
+                }
+                <h1>{activity?.title}</h1>
                 <div>
                     <form
                         onSubmit={handleSubmit(onSubmit)}
@@ -61,19 +68,17 @@ function Modal() {
                             {fields.map((field, index) => {
                                 return (
                                     <div key={field.id}>
-                                        <section className={"section"} key={field.id}>
-                                            <input
-                                                placeholder="title"
-                                                {...register(`actionList.${index}.title` as const, {
-                                                    required: true
-                                                })}
-                                                className={errors?.actionList?.[index]?.title ? "error" : ""}
-                                                defaultValue={field.title}
-                                            />
-                                            <button type="button" onClick={() => remove(index)}>
-                                                DELETE
-                                            </button>
-                                        </section>
+                                        <input
+                                            placeholder="Name"
+                                            {...register(`actionList.${index}.name` as const, {
+                                                required: true
+                                            })}
+                                            defaultValue={field.name}
+                                        />
+                                        <button type="button" onClick={() => remove(index)}>
+                                            DELETE
+                                        </button>
+                                        <StepSet nestIndex={index} {...{ control, register }} />
                                         <button onClick={() => alert("cliecked")}><PlusIcon className="h-6 w-6 modalButton" /></button>
                                     </div>
                                 );
@@ -85,7 +90,8 @@ function Modal() {
                             type="button"
                             onClick={() => {
                                 append({
-                                    title: "New Action Title",
+                                    name: "Some Action Name",
+                                    actualSteps: [{ content: "some step content 1" }, { content: "some step content 2" }]
                                 })
                             }
                             }
