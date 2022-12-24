@@ -13,8 +13,9 @@ import { useState } from "react";
 import TabPanel from "../components/TabPanel";
 import { ThemeProvider, CssBaseline } from "@mui/material";
 import { darkTheme } from "../styles/themes";
-import { activityModalState, snapshotModalState } from "../atoms/recoil_state";
+import { activityModalState, activityReportModalState, snapshotModalState } from "../atoms/recoil_state";
 import { useRecoilState } from "recoil";
+import ActivityReport from "../components/ActivityReport";
 
 function a11yProps(index: number) {
   return {
@@ -26,6 +27,8 @@ function a11yProps(index: number) {
 export default function Home() {
   const [value, setValue] = useState(0);
   const [showModal, setShowModal] = useRecoilState(snapshotModalState)
+  const [showActivityModal, setShowActivityModal] = useRecoilState(activityModalState)
+  const [showActivityReportModal, setShowActivityReportModal] = useRecoilState(activityReportModalState)
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -52,7 +55,8 @@ export default function Home() {
                 <ActivitySet />
               </Grid>
               <Grid item xs={12} md={6}>
-                {activityModalState && <ActivityModal />}
+                {showActivityModal && <ActivityModal />}
+                {showActivityReportModal && <ActivityReport />}
               </Grid>
             </Grid>
           </TabPanel>

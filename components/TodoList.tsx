@@ -41,7 +41,7 @@ export default function TodoList() {
                         {...register('task', { required: true })}
                         onChange={handleChange}
                     />
-                    <Button type="submit" value="Submit">Submit</Button>
+                    <Button type="submit" variant="outlined" value="Submit">Submit</Button>
                 </form>
             </div>
         </div>

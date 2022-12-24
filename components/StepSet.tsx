@@ -1,26 +1,28 @@
 import React from "react";
 import { useFieldArray } from "react-hook-form";
 
-export default ({ nestIndex, control, register } : any) => {
+export default ({ nestIndex, control, register }: any) => {
   const { fields, remove, append } = useFieldArray({
     control,
     name: `actionList[${nestIndex}].actualSteps`
   });
 
   return (
-    <div>
+    <div className="space-y-4">
       {fields.map((item, k) => {
         return (
-          <div key={item.id} style={{ marginLeft: 20 }}>
-            <label>Nested Array:</label>
-            <input
-              {...register(`actionList[${nestIndex}].actualSteps[${k}].content`, { required: true })}
-              defaultValue={item.content}
-              style={{ marginRight: "25px" }}
-            />
-            <button type="button" onClick={() => remove(k)}>
-              Delete Nested
-            </button>
+          <div key={item.id}>
+            <div className="flex flex-row space-x-4 ml-3">
+              <input
+                {...register(`actionList[${nestIndex}].actualSteps[${k}].content`, { required: true })}
+                placeholder={item.content}
+                className={"input"}
+              />
+              <button type="button" onClick={() => remove(k)}>
+                Delete
+              </button>
+            </div>
+
           </div>
         );
       })}
@@ -35,8 +37,6 @@ export default ({ nestIndex, control, register } : any) => {
       >
         Append Nested
       </button>
-
-      <hr />
     </div>
   );
 };

@@ -61,3 +61,13 @@ export const activityState = atom<Activity | null>({
     key: "activityState",
     default: null
 })
+
+export const activityReportModalState = atom({
+    key: "activityReportModalState",
+    default: false
+})
+
+export const activityReportState = atom({
+    key: "activityReportState",
+    default: {} as Activity
+})

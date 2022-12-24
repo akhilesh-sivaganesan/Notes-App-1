@@ -5,7 +5,7 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
 import { useRecoilState } from "recoil";
-import { activityModalState, activityListState, activityState } from "../atoms/recoil_state";
+import { activityModalState, activityListState, activityState, activityReportModalState, activityReportState } from "../atoms/recoil_state";
 
 export default function ActivityItem (
     { id, title,
@@ -16,10 +16,12 @@ export default function ActivityItem (
         const [showActivityModal, setShowActivityModal] = useRecoilState<boolean>(activityModalState)
         const [ activity, setActivity ] = useRecoilState<Activity | null>(activityState)
         const [ activityList, setActivityList ] = useRecoilState<Activity[]>(activityListState)
+        const [ showActivityReportModal, setShowActivityReportModal] = useRecoilState<boolean>(activityReportModalState)
+        const [ activityReport, setActivityReport] = useRecoilState(activityReportState)
 
     function handleClick() {
-        setActivity(activityList.find(o => o.id === id) || null)
-        setShowActivityModal(true)
+        setActivityReport(activityList.find(o => o.id === id) || {} as Activity)
+        setShowActivityReportModal(true)
     }
     return (
         <div>
@@ -34,6 +36,9 @@ export default function ActivityItem (
                     <CardContent>
                         <Typography gutterBottom variant="h5" component="div">
                             {startTime.toLocaleTimeString()}
+                        </Typography>
+                        <Typography gutterBottom variant="h5" component="div">
+                            {endTime.toLocaleTimeString()}
                         </Typography>
                         <Typography variant="body2" color="text.secondary">
                             {title}
