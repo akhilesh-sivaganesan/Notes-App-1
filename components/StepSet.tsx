@@ -1,5 +1,8 @@
 import React from "react";
 import { useFieldArray } from "react-hook-form";
+import XCirlceIcon from '@heroicons/react/24/outline/XCircleIcon'
+import { PlusCircleIcon } from "@heroicons/react/24/outline";
+
 
 export default ({ nestIndex, control, register }: any) => {
   const { fields, remove, append } = useFieldArray({
@@ -8,34 +11,37 @@ export default ({ nestIndex, control, register }: any) => {
   });
 
   return (
-    <div className="space-y-4">
-      {fields.map((item, k) => {
-        return (
+    <div className="space-y-4 ml-3">
+      {fields.map((item, k) => 
+        
           <div key={item.id}>
-            <div className="flex flex-row space-x-4 ml-3">
+            <div className="flex flex-row space-x-4 ">
               <input
                 {...register(`actionList[${nestIndex}].actualSteps[${k}].content`, { required: true })}
-                placeholder={item.content}
+                placeholder={"Enter step here"}
                 className={"input"}
               />
+          
               <button type="button" onClick={() => remove(k)}>
-                Delete
+                <XCirlceIcon className="h-5 w-5"/>
               </button>
             </div>
 
           </div>
-        );
-      })}
+  
+      )}
 
       <button
         type="button"
         onClick={() =>
           append({
-            content: "some Content",
+            content: "",
           })
         }
+        className="flex flex-row space-x-1 items-center"
       >
-        Append Nested
+        <PlusCircleIcon className="h-5 w-5"/>
+        Add Step
       </button>
     </div>
   );

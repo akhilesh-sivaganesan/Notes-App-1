@@ -1,23 +1,23 @@
 import MuiModal from "@mui/material/Modal"
 import XMarkIcon from '@heroicons/react/24/outline/XMarkIcon'
+import BackspaceIcon from '@heroicons/react/24/outline/BackspaceIcon'
+import { PlusCircleIcon } from "@heroicons/react/24/outline";
+
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { Activity, ActivityInputs } from '../typings'
 import { actionIDState, activityModalState, activityState, activityListState, activityIDState, activityReportState } from "../atoms/recoil_state"
 import { PlusIcon } from "@heroicons/react/24/outline";
 import { useForm, useFieldArray, SubmitHandler } from "react-hook-form";
 import StepSet from "./StepSet";
+import { Button } from "@mui/material";
 
 const defaultValues = {
-    title: "Some Activity Title",
-    notes: "Some Activity Notes",
+    title: "",
+    notes: "",
     actionList: [
         {
-            name: "Some Action Name 1",
-            actualSteps: [{ content: "some step content 1" }, { content: "some step content 2" }]
-        },
-        {
-            name: "Some Action Name 2",
-            actualSteps: [{ content: "some step content 1" }, { content: "some step content 2" }]
+            name: "",
+            actualSteps: [{ content: "" }, { content: "" }]
         },
     ]
 };
@@ -28,7 +28,7 @@ function Modal() {
     const [actionID, setActionID] = useRecoilState<number>(actionIDState)
     const [activityList, setActivityList] = useRecoilState<Activity[]>(activityListState)
     const [activityID, setActivityID] = useRecoilState<number>(activityIDState)
-    const [ activityReport, setActivityReport ] = useRecoilState(activityReportState)
+    const [activityReport, setActivityReport] = useRecoilState(activityReportState)
 
 
     const { getValues, reset, setValue, register, control, handleSubmit, formState: { errors } } = useForm<ActivityInputs>({ defaultValues });
@@ -74,12 +74,14 @@ function Modal() {
                     <XMarkIcon className="h-6 w-6" />
                 </button>
                 <div className="space-y-4">
-                    <h1 className="text-4xl">{activity?.title}</h1>
-                    <input className="input" {...register("title", { required: true })}></input>
+                    <input className="input"
+                        {...register("title", { required: true })}
+                        placeholder='Enter activity title here'
+                    ></input>
                     <textarea
                         {...register('notes', { required: true })}
                         className="input"
-                        placeholder='Enter some notes here'
+                        placeholder='Enter key points about this activity here'
                     >
                     </textarea>
 
@@ -94,7 +96,7 @@ function Modal() {
                                     <div key={field.id} className="space-y-4">
                                         <div className="flex flex-row space-x-4">
                                             <input
-                                                placeholder="Name"
+                                                placeholder="Enter Action Name"
                                                 {...register(`actionList.${index}.name` as const, {
                                                     required: true
                                                 })}
@@ -102,12 +104,11 @@ function Modal() {
                                                 className={"input"}
                                             />
                                             <button type="button" onClick={() => remove(index)}>
-                                                DELETE
+                                                <BackspaceIcon className="h-5 w-5" />
                                             </button>
                                         </div>
 
                                         <StepSet nestIndex={index} {...{ control, register }} />
-                                        <button onClick={() => alert("cliecked")}><PlusIcon className="h-6 w-6 modalButton" /></button>
                                     </div>
                                 );
                             }
@@ -116,18 +117,23 @@ function Modal() {
                                 type="button"
                                 onClick={() => {
                                     append({
-                                        name: "Some Action Name",
-                                        actualSteps: [{ content: "some step content 1" }, { content: "some step content 2" }]
+                                        name: "",
+                                        actualSteps: [{ content: "" }]
                                     })
                                 }
                                 }
+                                className="flex flex-row space-x-2 items-center"
+
                             >
-                                APPEND
+                                <PlusCircleIcon className="h-6 w-6" />
+                                Add Action
                             </button>
                         </div>
 
 
-                        <input type="submit" />
+                        <Button type="submit" variant="outlined" className="absolute right-5 bottom-5 !z-40">
+                            Submit Activity
+                        </Button>
                     </form>
                 </div>
             </div>
