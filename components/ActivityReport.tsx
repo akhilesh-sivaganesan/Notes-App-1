@@ -1,14 +1,31 @@
 import MuiModal from "@mui/material/Modal"
 import XMarkIcon from '@heroicons/react/24/outline/XMarkIcon'
+import ClockIcon from '@heroicons/react/24/outline/ClockIcon'
+import CalendarIcon from '@heroicons/react/24/outline/CalendarIcon'
+
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { actionIDState, activityModalState, activityState, activityListState, activityIDState, activityReportModalState, activityReportState } from "../atoms/recoil_state"
 
 function ActivityReport() {
     const [showActivityReportModal, setShowActivityReportModal] = useRecoilState(activityReportModalState)
-    const [ activityReport, setActivityReport ] = useRecoilState(activityReportState)
+    const [activityReport, setActivityReport] = useRecoilState(activityReportState)
 
     const handleClose = () => {
         setShowActivityReportModal(false)
+    }
+
+    function dateDiffToString(a: Date, b: Date) {
+        var diff = Math.abs(a.getTime() - b.getTime());
+        var ms = diff % 1000;
+        diff = (diff - ms) / 1000
+        var ss = diff % 60;
+        diff = (diff - ss) / 60
+        var mm = diff % 60;
+        diff = (diff - mm) / 60
+        var hh = diff % 24;
+        var days = (diff - hh) / 24
+
+        return mm + "min " + ss + "s";
     }
 
     return (
@@ -20,7 +37,35 @@ function ActivityReport() {
                 >
                     <XMarkIcon className="h-6 w-6" />
                 </button>
-                <p>{JSON.stringify(activityReport)}</p>
+                <h1 className="text-4xl">{activityReport.title}</h1>
+                <div className="flex flex-row">
+                    <ClockIcon className="h-6 w-6 mr-2" />
+                    <p>{dateDiffToString(activityReport.startTime, activityReport.endTime)}</p>
+                </div>
+                <div className="flex flex-row">
+                    <CalendarIcon className="h-6 w-6 mr-2" />
+                    <p>{activityReport.startTime.toLocaleTimeString() + " - " + activityReport.endTime.toLocaleTimeString()}</p>
+                </div>
+                <div className="space-y-4">
+                    {
+                        activityReport.actionList.map(
+                            (action, index) =>
+                                <div key={index} >
+                                    <h1 className="text-2xl">{action.name}</h1>
+                                    <div>
+                                    {
+                                        action.actualSteps.map((step, i) => 
+                                            <div key={i}>
+                                                <p>{step.content}</p>
+                                            </div>
+                                        ) 
+                                    }
+                                    </div>
+                                </div>
+                        )
+                    }
+                </div>
+
             </div>
         </MuiModal>
     )

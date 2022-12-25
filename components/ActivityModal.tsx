@@ -59,6 +59,7 @@ function Modal() {
         setActivityID(activityID + 1)
         setActivity(copyObj)
         setActivityReport(copyObj)
+        console.log(copyObj)
         setShowActivityModal(false)
     }
 

@@ -51,7 +51,7 @@ export interface Action {
     predicted ?: Step[],
     startTime ?: Date,
     endTime ?: Date,
-    actual: Step[],
+    actualSteps: Step[],
 }
 
 export interface Step {
