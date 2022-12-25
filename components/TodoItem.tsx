@@ -2,7 +2,7 @@ import { Todo, Activity, Action } from "../typings"
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
-import { activityIDState, activityListState, activityModalState, activityState, todoListState } from "../atoms/recoil_state";
+import { activityIDState, activityListState, activityModalState, activityReportState, activityState, todoListState } from "../atoms/recoil_state";
 import { useRecoilState } from "recoil"
 
 
@@ -13,6 +13,7 @@ export default function TodoItem({ id, completion, task }: Todo) {
     const [ activity, setActivity ] = useRecoilState<Activity | null>(activityState)
     const [ activityList, setActivityList ] = useRecoilState<Activity[]>(activityListState)
     const [ activityID, setActivityID ] = useRecoilState<number>(activityIDState)
+    const [activityReport, setActivityReport] = useRecoilState(activityReportState)
 
     function handleTaskChange(event: React.ChangeEvent<HTMLInputElement>) {
         //replace the item in the todolist array that matches this current id
@@ -30,10 +31,18 @@ export default function TodoItem({ id, completion, task }: Todo) {
     function handleEngagement() {
         //Create new activity for from this todo
         //set this todo description as the title
-        const activityObj = {id: activityID, title: task, startTime: new Date(), actionList: [] as Action[], endTime: new Date(), notes: ""};
-        setActivityID(activityID + 1)
-        setActivityList([...activityList, activityObj as Activity])
-        setActivity(activityList.find(o => o.id === activityObj.id) || null)
+        const activityObj = {
+            id: activityID,
+            title: task,
+            startTime: new Date(),
+            endTime: new Date(),
+            actionList: [] as Action[],
+            notes: "",
+        };
+        //setActivityID(activityID + 1)
+        //setActivityList([...activityList, activityObj as Activity])
+        //setActivity(activityList.find(o => o.id === activityObj.id) || null)
+        setActivity(activityObj as Activity)
         setShowActivityModal(true)
     }
 

@@ -63,6 +63,7 @@ function Modal() {
         setShowActivityModal(false)
     }
 
+    defaultValues.title = (activity?.title !== undefined) ? activity?.title : "";
 
     return (
         <MuiModal open={showActivityModal} onClose={handleClose} className="fixed bg-black/75 h-[90vh] p-5 z-50 mx-auto my-10 w-full max-w-7xl overflow-scroll rounded-md scrollbar-hide border-solid border-2 border-sky-500">
