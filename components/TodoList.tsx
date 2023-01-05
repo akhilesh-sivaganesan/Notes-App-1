@@ -6,7 +6,7 @@ import { TextField, Button, Typography } from "@mui/material"
 import { useState } from 'react'
 import { useForm, SubmitHandler } from "react-hook-form";
 import { darkTheme } from "../styles/themes";
-
+import { addTodo } from '../api/todo';
 export default function TodoList() {
     const { register, handleSubmit, watch, formState: { errors } } = useForm<TodoInputs>();
     const [todoList, setTodoList] = useRecoilState<Todo[]>(todoListState);
@@ -19,6 +19,7 @@ export default function TodoList() {
         const todoObj = JSON.parse(JSON.stringify(data))
         todoObj.completion = false;
         todoObj.id = todoID;
+        await(addTodo(todoObj))
         setTodoID(todoID + 1)
         setTodoList([...todoList, todoObj as Todo])
     }
