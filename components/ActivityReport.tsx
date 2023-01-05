@@ -38,6 +38,7 @@ function ActivityReport() {
                     <XMarkIcon className="h-6 w-6" />
                 </button>
                 <h1 className="text-4xl">{activityReport.title}</h1>
+                <p className="max-w-sm">{activityReport.notes}</p>
                 <div className="flex flex-row">
                     <ClockIcon className="h-6 w-6 mr-2" />
                     <p>{dateDiffToString(activityReport.startTime, activityReport.endTime)}</p>
@@ -46,11 +47,11 @@ function ActivityReport() {
                     <CalendarIcon className="h-6 w-6 mr-2" />
                     <p>{activityReport.startTime.toLocaleTimeString() + " - " + activityReport.endTime.toLocaleTimeString()}</p>
                 </div>
-                <div className="space-y-4">
+                <ol className="space-y-4 report-action-list">
                     {
                         activityReport.actionList.map(
                             (action, index) =>
-                                <div key={index} >
+                                <li key={index} >
                                     <h1 className="text-2xl">{action.name}</h1>
                                     <div>
                                     {
@@ -61,10 +62,10 @@ function ActivityReport() {
                                         ) 
                                     }
                                     </div>
-                                </div>
+                                </li>
                         )
                     }
-                </div>
+                </ol>
 
             </div>
         </MuiModal>

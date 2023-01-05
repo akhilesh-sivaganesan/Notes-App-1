@@ -34,6 +34,45 @@ a {
   .input {
     @apply w-full rounded bg-[#333333] px-5 py-3.5 placeholder-[gray] outline-none focus:bg-[#454545];
   }
+  
+  .activity-modal-input {
+    @apply w-full rounded bg-[#333333] px-5 py-3.5 placeholder-[gray] outline-none;
+    
+  }
+
+  .activity-modal-input:focus {
+    background-image: none !important;
+    background-color: rgb(59 130 246 / 0.4) !important;
+  }
+
+  .report-action-list {
+    counter-reset: my-awesome-counter;
+    list-style: none;
+    padding-left: 40px;
+  }
+
+  .report-action-list li {
+    margin: 0 0 0.5rem 0;
+    counter-increment: my-awesome-counter;
+    position: relative;
+  }
+
+  .report-action-list li::before {
+    content: counter(my-awesome-counter);
+    color: black;
+    font-size: 1rem;
+    font-weight: bold;
+    position: absolute;
+    --size: 32px;
+    left: calc(-1 * var(--size) - 10px);
+    line-height: var(--size);
+    width: var(--size);
+    height: var(--size);
+    top: 0;
+    background: white;
+    border-radius: 50%;
+    text-align: center;
+  }
 
   .bannerButton {
     @apply flex items-center gap-x-2 rounded px-5 py-1.5 text-sm font-semibold transition hover:opacity-75 md:py-2.5 md:px-8 md:text-xl;

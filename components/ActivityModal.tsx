@@ -74,14 +74,14 @@ function Modal() {
                 >
                     <XMarkIcon className="h-6 w-6" />
                 </button>
-                <div className="space-y-4">
-                    <input className="input"
+                <div className="space-y-4 w-fit">
+                    <input className="activity-modal-input"
                         {...register("title", { required: true })}
                         placeholder='Enter activity title here'
                     ></input>
                     <textarea
                         {...register('notes', { required: true })}
-                        className="input"
+                        className="activity-modal-input"
                         placeholder='Enter key points about this activity here'
                     >
                     </textarea>
@@ -102,7 +102,7 @@ function Modal() {
                                                     required: true
                                                 })}
                                                 defaultValue={field.name}
-                                                className={"input"}
+                                                className={"activity-modal-input"}
                                             />
                                             <button type="button" onClick={() => remove(index)}>
                                                 <BackspaceIcon className="h-5 w-5" />

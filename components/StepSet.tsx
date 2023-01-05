@@ -19,7 +19,7 @@ export default ({ nestIndex, control, register }: any) => {
               <input
                 {...register(`actionList[${nestIndex}].actualSteps[${k}].content`, { required: true })}
                 placeholder={"Enter step here"}
-                className={"input"}
+                className={"activity-modal-input"}
               />
           
               <button type="button" onClick={() => remove(k)}>
