@@ -16,6 +16,7 @@ import { darkTheme } from "../styles/themes";
 import { activityModalState, activityReportModalState, snapshotModalState } from "../atoms/recoil_state";
 import { useRecoilState } from "recoil";
 import ActivityReport from "../components/ActivityReport";
+import useAuth from '../hooks/useAuth'
 
 function a11yProps(index: number) {
   return {
@@ -29,6 +30,10 @@ export default function Home() {
   const [showModal, setShowModal] = useRecoilState(snapshotModalState)
   const [showActivityModal, setShowActivityModal] = useRecoilState(activityModalState)
   const [showActivityReportModal, setShowActivityReportModal] = useRecoilState(activityReportModalState)
+  const { loading } = useAuth()
+  const { logout } = useAuth()
+
+  if (loading) return null
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -45,6 +50,12 @@ export default function Home() {
               <Tab label="Structured Journal" {...a11yProps(1)} />
               <Tab label="Current Queue" {...a11yProps(2)} />
             </Tabs>
+            <img
+              src="https://occ-0-1190-2774.1.nflxso.net/dnm/api/v6/K6hjPJd6cR6FpVELC5Pd6ovHRSk/AAAABbme8JMz4rEKFJhtzpOKWFJ_6qX-0y5wwWyYvBhWS0VKFLa289dZ5zvRBggmFVWVPL2AAYE8xevD4jjLZjWumNo.png?r=a41"
+              alt=""
+              className="cursor-pointer rounded absolute top-2 right-2"
+              onClick={logout}
+            />
           </Box>
           <TabPanel value={value} index={0}>
             <Grid container spacing={4}>
@@ -59,6 +70,7 @@ export default function Home() {
                 {showActivityReportModal && <ActivityReport />}
               </Grid>
             </Grid>
+
           </TabPanel>
           <TabPanel value={value} index={1}>
             <Grid container spacing={4}>
