@@ -28,7 +28,8 @@ export interface Snapshot {
 export interface Todo {
     id: number,
     completion: boolean,
-    task: String
+    task: String,
+    createdAt: Date
 }
 
 export interface TodoInputs {

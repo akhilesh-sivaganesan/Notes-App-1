@@ -2,25 +2,29 @@ import { db } from "../firebase";
 import {
     collection,
     addDoc,
+    setDoc,
     updateDoc,
     doc,
     deleteDoc,
 } from "firebase/firestore";
-const addTodo = async ({ task, completion, id } : any) => {
+import { Todo } from "../typings";
+const addTodo = async ({ task, completion, id, createdAt } : any) => {
     try {
-        await addDoc(collection(db, "todo"), {
+        await setDoc(doc(db, "todo", createdAt.getTime() + ""), {
             id: id,
             task: task,
             completion: completion,
-            createdAt: new Date().getTime(),
+            createdAt: createdAt.getTime(),
         });
-    } catch (err) { }
+    } catch (err) {
+        console.log(err)
+    }
 };
-const toggleTodoStatus = async ({ docId, status } : any) => {
+const toggleTodoStatus = async ({ docId, completion } : any) => {
     try {
-        const todoRef = doc(db, "todo", docId);
+        const todoRef = doc(db, "todo", docId + "");
         await updateDoc(todoRef, {
-            status,
+            completion,
         });
     } catch (err) {
         console.log(err);
@@ -28,7 +32,7 @@ const toggleTodoStatus = async ({ docId, status } : any) => {
 };
 const deleteTodo = async (docId : any) => {
     try {
-        const todoRef = doc(db, "todo", docId);
+        const todoRef = doc(db, "todo", docId + "");
         await deleteDoc(todoRef);
     } catch (err) {
         console.log(err);

@@ -4,9 +4,9 @@ import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
 import { activityIDState, activityListState, activityModalState, activityReportState, activityState, todoListState } from "../atoms/recoil_state";
 import { useRecoilState } from "recoil"
+import { deleteTodo, toggleTodoStatus } from "../api/todo";
 
-
-export default function TodoItem({ id, completion, task }: Todo) {
+export default function TodoItem({ id, completion, task, createdAt }: Todo) {
 
     const [todoList, setTodoList] = useRecoilState<Todo[]>(todoListState)
     const [showActivityModal, setShowActivityModal] = useRecoilState<boolean>(activityModalState)
@@ -17,15 +17,17 @@ export default function TodoItem({ id, completion, task }: Todo) {
 
     function handleTaskChange(event: React.ChangeEvent<HTMLInputElement>) {
         //replace the item in the todolist array that matches this current id
-        const todoObj = { id: id, completion: completion, task: event.target.value }
+        const todoObj = { id: id, completion: completion, task: event.target.value, createdAt: createdAt }
         setTodoList(todoList.map(todo => [todoObj].find(o => o.id === todo.id) || todo))
     }
 
     function handleStatusChange() {
-        const todoObj = { id: id, completion: !completion, task: task }
+        const todoObj = { id: id, completion: !completion, task: task, createdAt: createdAt }
+        toggleTodoStatus({docId: createdAt.getTime(), completion: todoObj.completion})
         setTodoList(todoList.map(todo => [todoObj].find(o => o.id === todo.id) || todo))
     }
-    function handleDeletion() {
+    async function handleDeletion() {
+        await(deleteTodo(createdAt.getTime()))
         setTodoList(todoList.filter(todo => todo.id !== id))
     }
     function handleEngagement() {
