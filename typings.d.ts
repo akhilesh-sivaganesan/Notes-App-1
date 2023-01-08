@@ -45,6 +45,7 @@ export interface Activity {
     title: string,
     notes: string,
     actionList: Action[],
+    userId: String | undefined,
 }
 
 export interface Action {

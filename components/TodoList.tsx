@@ -45,7 +45,7 @@ export default function TodoList() {
         onSnapshot(q, (querySnapchot) => {
           let ar = [] as Todo[];
           querySnapchot.docs.forEach((doc) => {
-            ar.push({task: doc.data().task, completion: doc.data().completion, id: doc.data().id, userId: doc.data().userId, createdAt: doc.data().createdAt});
+            ar.push({task: doc.data().task, completion: doc.data().completion, id: doc.data().id, userId: doc.data().userId, createdAt: doc.data().createdAt.toDate()});
           });
           setTodoList(ar);
         });

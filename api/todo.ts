@@ -15,7 +15,7 @@ const addTodo = async ({ task, completion, id, createdAt, userId } : any) => {
             id: id,
             task: task,
             completion: completion,
-            createdAt: createdAt.getTime(),
+            createdAt: createdAt,
         });
     } catch (err) {
         console.log(err)

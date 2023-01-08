@@ -10,6 +10,9 @@ import { PlusIcon } from "@heroicons/react/24/outline";
 import { useForm, useFieldArray, SubmitHandler } from "react-hook-form";
 import StepSet from "./StepSet";
 import { Button } from "@mui/material";
+import useAuth from "../hooks/useAuth";
+import { useEffect } from "react";
+import { addActivity } from "../api/activity";
 
 const defaultValues = {
     title: "",
@@ -29,6 +32,7 @@ function Modal() {
     const [activityList, setActivityList] = useRecoilState<Activity[]>(activityListState)
     const [activityID, setActivityID] = useRecoilState<number>(activityIDState)
     const [activityReport, setActivityReport] = useRecoilState(activityReportState)
+    const { user } = useAuth()
 
 
     const { getValues, reset, setValue, register, control, handleSubmit, formState: { errors } } = useForm<ActivityInputs>({ defaultValues });
@@ -54,8 +58,10 @@ function Modal() {
         copyObj.actionList = data.actionList;
         copyObj.notes = data.notes;
         copyObj.title = data.title;
+        copyObj.userId = user?.uid;
 
         setActivityList([...activityList, copyObj as Activity])
+        addActivity(copyObj)
         setActivityID(activityID + 1)
         setActivity(copyObj)
         setActivityReport(copyObj)
@@ -67,9 +73,9 @@ function Modal() {
 
     return (
         <MuiModal open={showActivityModal} onClose={handleClose} className="fixed bg-black/75 h-[90vh] p-5 z-50 mx-auto my-10 w-full max-w-7xl overflow-scroll rounded-md scrollbar-hide border-solid border-2 border-sky-500">
-            <div className="space-y-4">
+            <div className="relative space-y-4">
                 <button
-                    className="modalButton absolute right-5 top-5 !z-40 h-9 w-9 border-none bg-[#181818] hover:bg-[#181818]"
+                    className="modalButton fixed right-[150px] top-[75px] !z-40 h-9 w-9 border-none bg-[#181818] hover:bg-[#181818]"
                     onClick={handleClose}
                 >
                     <XMarkIcon className="h-6 w-6" />
@@ -87,14 +93,15 @@ function Modal() {
                     </textarea>
 
                 </div>
-                <div>
+                <div className="">
                     <form
                         onSubmit={handleSubmit(onSubmit)}
+                        className="relative w-full overflow-visible"
                     >
-                        <div className="flex flex-row items-start justify-start space-x-4">
+                        <div className="flex flex-row items-start justify-start w-full space-x-4">
                             {fields.map((field, index) => {
                                 return (
-                                    <div key={field.id} className="space-y-4">
+                                    <div key={field.id} className="space-y-4 min-w-[300px]">
                                         <div className="flex flex-row space-x-4">
                                             <input
                                                 placeholder="Enter Action Name"
@@ -123,7 +130,7 @@ function Modal() {
                                     })
                                 }
                                 }
-                                className="flex flex-row space-x-2 items-center"
+                                className="flex flex-row space-x-2 items-center min-w-[200px]"
 
                             >
                                 <PlusCircleIcon className="h-6 w-6" />
@@ -132,7 +139,7 @@ function Modal() {
                         </div>
 
 
-                        <Button type="submit" variant="outlined" className="absolute right-5 bottom-5 !z-40">
+                        <Button type="submit" variant="outlined" className="absolute top-5 !z-40">
                             Submit Activity
                         </Button>
                     </form>

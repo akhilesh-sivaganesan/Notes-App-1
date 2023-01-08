@@ -3,11 +3,17 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
-import { CardActionArea } from '@mui/material';
+import { Button, CardActionArea } from '@mui/material';
 import { useRecoilState } from "recoil";
 import { activityModalState, activityListState, activityState, activityReportModalState, activityReportState } from "../atoms/recoil_state";
 import ClockIcon from '@heroicons/react/24/outline/ClockIcon'
 import CalendarIcon from '@heroicons/react/24/outline/CalendarIcon'
+import { TrashIcon } from "@heroicons/react/24/outline";
+import { deleteActivity } from "../api/activity";
+import useAuth from "../hooks/useAuth";
+import { collection, onSnapshot, query, where } from 'firebase/firestore';
+import { db } from "../firebase";
+import { useEffect } from "react";
 
 export default function ActivityItem(
     { id, title,
@@ -20,9 +26,10 @@ export default function ActivityItem(
     const [activityList, setActivityList] = useRecoilState<Activity[]>(activityListState)
     const [showActivityReportModal, setShowActivityReportModal] = useRecoilState<boolean>(activityReportModalState)
     const [activityReport, setActivityReport] = useRecoilState(activityReportState)
+    const { user } = useAuth()
 
     function handleClick() {
-        setActivityReport(activityList.find(o => o.id === id) || {} as Activity)
+        setActivityReport(activityList.find(o => o.startTime === startTime) || {} as Activity)
         setShowActivityReportModal(true)
     }
 
@@ -39,6 +46,33 @@ export default function ActivityItem(
 
         return mm + "min " + ss + "s";
     }
+
+    async function handleDelete() {
+        setActivityList(activityList.filter(activity => activity.startTime !== startTime))
+        await deleteActivity(startTime.getTime() + "")
+    }
+
+    const refreshData = () => {
+        
+        if (!user) {
+            setActivityList([]);
+            return;
+        }
+        
+        const q = query(collection(db, "activity"), where("userId", "==", user?.uid));
+
+        onSnapshot(q, (querySnapchot) => {
+            let ar = [] as Activity[];
+            querySnapchot.docs.forEach((doc) => {
+                ar.push({ id: doc.data().id, startTime: doc.data().startTime.toDate(), endTime: doc.data().endTime.toDate(), title: doc.data().title, notes: doc.data().notes, actionList: doc.data().actionList, userId: doc.data().userId });
+            });
+            setActivityList(ar);
+        });
+    };
+
+    useEffect(() => {
+        refreshData();
+    }, [user]);
 
     return (
         <div>
@@ -58,6 +92,7 @@ export default function ActivityItem(
                             <CalendarIcon className="h-6 w-6 mr-2" />
                             <Typography variant="body2" color="text.secondary">{startTime.toLocaleTimeString() + " - " + endTime.toLocaleTimeString()}</Typography>
                         </div>
+                        <TrashIcon className="absolute top-2 right-2 h-6 w-6" onClick={handleDelete}/>
                     </CardContent>
                 </CardActionArea>
             </Card>
