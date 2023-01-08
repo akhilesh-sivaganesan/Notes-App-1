@@ -29,7 +29,8 @@ export interface Todo {
     id: number,
     completion: boolean,
     task: String,
-    createdAt: Date
+    createdAt: Date,
+    userId: String | undefined
 }
 
 export interface TodoInputs {

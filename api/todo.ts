@@ -8,9 +8,10 @@ import {
     deleteDoc,
 } from "firebase/firestore";
 import { Todo } from "../typings";
-const addTodo = async ({ task, completion, id, createdAt } : any) => {
+const addTodo = async ({ task, completion, id, createdAt, userId } : any) => {
     try {
         await setDoc(doc(db, "todo", createdAt.getTime() + ""), {
+            user: userId,
             id: id,
             task: task,
             completion: completion,

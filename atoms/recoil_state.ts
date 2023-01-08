@@ -1,3 +1,4 @@
+import { User } from 'firebase/auth';
 import { atom } from 'recoil';
 import {Snapshot, Todo, Activity} from "../typings";
 

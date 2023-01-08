@@ -4,7 +4,7 @@ import SnapshotSet from "../components/SnapshotSet"
 import SnapshotModal from "../components/SnapshotModal";
 import ActivityModal from "../components/ActivityModal";
 import ActivitySet from "../components/ActivitySet";
-import { Container, Grid } from "@mui/material"
+import { Button, Container, Grid } from "@mui/material"
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
@@ -17,6 +17,7 @@ import { activityModalState, activityReportModalState, snapshotModalState } from
 import { useRecoilState } from "recoil";
 import ActivityReport from "../components/ActivityReport";
 import useAuth from '../hooks/useAuth'
+import { ArrowLeftOnRectangleIcon } from "@heroicons/react/24/outline";
 
 function a11yProps(index: number) {
   return {
@@ -32,6 +33,8 @@ export default function Home() {
   const [showActivityReportModal, setShowActivityReportModal] = useRecoilState(activityReportModalState)
   const { loading } = useAuth()
   const { logout } = useAuth()
+  const { user } = useAuth()
+
 
   if (loading) return null
 
@@ -44,18 +47,22 @@ export default function Home() {
       <CssBaseline />
       <Container maxWidth="xl">
         <Box sx={{ width: '100%' }}>
-          <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-            <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
+          <Box sx={{ borderBottom: 1, borderColor: 'divider' }} className="flex flex-row items-center justify-between">
+            <Tabs value={value} onChange={handleChange} aria-label="basic tabs example" >
               <Tab label="Activity Log" {...a11yProps(0)} />
               <Tab label="Structured Journal" {...a11yProps(1)} />
               <Tab label="Current Queue" {...a11yProps(2)} />
             </Tabs>
-            <img
-              src="https://occ-0-1190-2774.1.nflxso.net/dnm/api/v6/K6hjPJd6cR6FpVELC5Pd6ovHRSk/AAAABbme8JMz4rEKFJhtzpOKWFJ_6qX-0y5wwWyYvBhWS0VKFLa289dZ5zvRBggmFVWVPL2AAYE8xevD4jjLZjWumNo.png?r=a41"
-              alt=""
-              className="cursor-pointer rounded absolute top-2 right-2"
-              onClick={logout}
-            />
+            <div className="flex flex-row space-x-2 items-center">
+              <Button onClick={logout}>
+                Logout
+                <ArrowLeftOnRectangleIcon
+                  className="cursor-pointer rounded h-7 w-7"
+                />
+              </Button>
+
+              <Typography variant="body2">{user?.email}</Typography>
+            </div>
           </Box>
           <TabPanel value={value} index={0}>
             <Grid container spacing={4}>
