@@ -35,6 +35,15 @@ export default function TodoList() {
         setValue(event.target.value)
     }
 
+    function handleKeyDown(event : React.KeyboardEvent<HTMLInputElement>) {
+        var inputValue = (document.getElementById("taskInput") as HTMLInputElement).value
+        setValue(inputValue)
+        //alert(inputValue)
+        if (event.key === "Enter") {
+            onSubmit
+        }
+    }
+
     const refreshData = () => {
         if (!user) {
           setTodoList([]);
@@ -68,9 +77,10 @@ export default function TodoList() {
             }
             <div>
                 <form className="flex flex-row space-x-2 justify-center" onSubmit={handleSubmit(onSubmit)}>
-                    <TextField helperText={errorMessage} error={error} id="taskInput" type="text" placeholder="Enter Task" defaultValue={value}
+                    <TextField helperText={errorMessage} error={error} id="taskInput" type="text" placeholder="Enter Task" value={value}
                         {...register('task', { required: true })}
                         onChange={handleChange}
+                        onKeyDown={handleKeyDown}
                     />
                     <Button type="submit" variant="outlined" value="Submit">Submit</Button>
                 </form>

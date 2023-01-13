@@ -1,6 +1,6 @@
 import { User } from 'firebase/auth';
 import { atom } from 'recoil';
-import {Snapshot, Todo, Activity} from "../typings";
+import {Snapshot, Todo, Activity, Action} from "../typings";
 
 
 export const snapshotListState = atom({

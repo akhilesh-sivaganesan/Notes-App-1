@@ -11,19 +11,10 @@ import { useForm, useFieldArray, SubmitHandler } from "react-hook-form";
 import StepSet from "./StepSet";
 import { Button } from "@mui/material";
 import useAuth from "../hooks/useAuth";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { addActivity } from "../api/activity";
 
-const defaultValues = {
-    title: "",
-    notes: "",
-    actionList: [
-        {
-            name: "",
-            actualSteps: [{ content: "" }, { content: "" }]
-        },
-    ]
-};
+
 
 function Modal() {
     const [showActivityModal, setShowActivityModal] = useRecoilState(activityModalState)
@@ -34,8 +25,19 @@ function Modal() {
     const [activityReport, setActivityReport] = useRecoilState(activityReportState)
     const { user } = useAuth()
 
+    const defaultValues = {
+        title: "",
+        notes: "",
+        actionList: [
+            {
+                name: "",
+                actualSteps: [{ content: "" }, { content: "" }]
+            },
+        ]
+    };
 
-    const { getValues, reset, setValue, register, control, handleSubmit, formState: { errors } } = useForm<ActivityInputs>({ defaultValues });
+    const { getValues, reset, watch, register, control, handleSubmit, formState: { errors } } = useForm<ActivityInputs>({defaultValues});
+    const watchAllFields = watch();
 
     const { fields, append, remove } = useFieldArray({
         name: "actionList",
@@ -44,6 +46,18 @@ function Modal() {
 
 
     const handleClose = () => {
+        
+        console.log(watchAllFields)
+        /*
+        const copyObj = JSON.parse(JSON.stringify(activity))
+        copyObj.startTime = new Date(copyObj.startTime)
+        copyObj.endTime = new Date();
+        copyObj.actionList = watchAllFields.actionList;
+        copyObj.notes = watchAllFields.notes;
+        copyObj.title = watchAllFields.title;
+        copyObj.userId = user?.uid;
+        setActivity(copyObj)
+        */
         setShowActivityModal(false)
     }
 
@@ -75,7 +89,7 @@ function Modal() {
         <MuiModal open={showActivityModal} onClose={handleClose} className="fixed bg-black/75 h-[90vh] p-5 z-50 mx-auto my-10 w-full max-w-7xl overflow-scroll rounded-md scrollbar-hide border-solid border-2 border-sky-500">
             <div className="relative space-y-4">
                 <button
-                    className="modalButton fixed right-[150px] top-[75px] !z-40 h-9 w-9 border-none bg-[#181818] hover:bg-[#181818]"
+                    className="modalButton fixed right-[5%] top-[7.5%] !z-40 h-9 w-9 border-none bg-[#181818] hover:bg-[#181818]"
                     onClick={handleClose}
                 >
                     <XMarkIcon className="h-6 w-6" />
@@ -84,6 +98,7 @@ function Modal() {
                     <input className="activity-modal-input"
                         {...register("title", { required: true })}
                         placeholder='Enter activity title here'
+                        defaultValue={activity?.title}
                     ></input>
                     <textarea
                         {...register('notes', { required: true })}

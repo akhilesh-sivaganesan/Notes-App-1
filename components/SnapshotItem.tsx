@@ -6,6 +6,8 @@ import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
 import { useRecoilState } from "recoil";
 import { snapshotModalState, snapshotListState, snapshotState } from "../atoms/recoil_state";
+import { deleteSnapshot } from "../api/snapshot";
+import TrashIcon from "@heroicons/react/24/outline/TrashIcon";
 
 export default function SnapshotItem(
     { id, time,
@@ -25,6 +27,12 @@ export default function SnapshotItem(
         setSnapshot(snapshotList.find(o => o.id === id) || null)
         setShowModal(true)
     }
+
+    async function handleDelete() {
+        setSnapshotList(snapshotList.filter(activity => activity.time !== time))
+        await deleteSnapshot(time.getTime() + "")
+    }
+
     return (
         <div>
             <Card sx={{ maxWidth: 345 }}>
@@ -43,6 +51,7 @@ export default function SnapshotItem(
                             Lizards are a widespread group of squamate reptiles, with over 6,000
                             species, ranging across all continents except
                         </Typography>
+                        <TrashIcon className="absolute top-2 right-2 h-6 w-6" onClick={handleDelete}/>
                     </CardContent>
                 </CardActionArea>
             </Card>

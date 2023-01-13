@@ -4,11 +4,17 @@ import { Inputs, Snapshot } from '../typings'
 import { useRecoilState, useRecoilValue } from "recoil"
 import { snapshotListState, todoListState, snapshotIDState } from "../atoms/recoil_state";
 import {useState, useEffect } from 'react';
+import { addSnapshot } from "../api/snapshot";
+import useAuth from "../hooks/useAuth";
+import { collection, onSnapshot, query, where } from 'firebase/firestore';
+import { db } from '../firebase';
+
 export default function Form() {
 
   const { register, handleSubmit, watch, formState: { errors } } = useForm<Inputs>();
   const [snapshotList, setSnapshotList] = useRecoilState<Snapshot[]>(snapshotListState);
   const [snapshotID, setSnapshotID] = useRecoilState<number>(snapshotIDState);
+  const { user } = useAuth()
 
   const todoList = useRecoilValue(todoListState)
   const onSubmit: SubmitHandler<Inputs> = async (data) => {    
@@ -16,11 +22,43 @@ export default function Form() {
     snap.todoList = [...todoList]
     snap.time = new Date()
     snap.id = snapshotID
+    snap.userId = user?.uid;
+    await(addSnapshot(snap))
     setSnapshotID(snapshotID + 1)
     setSnapshotList([...snapshotList, snap as Snapshot])
   }
 
   const states = ["Energized", "Clear-minded", "Hydrated", "Still", "Easy", "Physically Cool"]
+
+  const refreshData = () => {
+    if (!user) {
+      setSnapshotList([]);
+      return;
+    }
+    const q = query(collection(db, "snapshot"), where("userId", "==", user.uid));
+
+    onSnapshot(q, (querySnapchot) => {
+      let ar = [] as Snapshot[];
+      querySnapchot.docs.forEach((doc) => {
+        ar.push({id: doc.data().id,
+          time: doc.data().time.toDate(),
+          todoList: doc.data().todoList,
+          states: doc.data().states,
+          location: doc.data().location,
+          thoughts: doc.data().thoughts,
+          reminders: doc.data().reminders,
+          unexpected: doc.data().unexpected,
+          foresight: doc.data().foresight,
+        });
+      });
+      setSnapshotList(ar);
+    });
+  };
+
+  useEffect(() => {
+    refreshData();
+  }, [user]);
+
 
   return (
     <div className="relative flex flex-col justify-start">
