@@ -9,7 +9,7 @@ import { darkTheme } from "../styles/themes";
 import { addTodo } from '../api/todo';
 import useAuth from '../hooks/useAuth';
 import { collection, onSnapshot, query, where } from 'firebase/firestore';
-import { db } from '../firebase';
+import { db } from "../firebase/index";
 export default function TodoList() {
     const { register, handleSubmit, watch, formState: { errors } } = useForm<TodoInputs>();
     const [todoList, setTodoList] = useRecoilState<Todo[]>(todoListState);

@@ -7,7 +7,7 @@ import {useState, useEffect } from 'react';
 import { addSnapshot } from "../api/snapshot";
 import useAuth from "../hooks/useAuth";
 import { collection, onSnapshot, query, where } from 'firebase/firestore';
-import { db } from '../firebase';
+import { db } from "../firebase/index";
 
 export default function Form() {
 

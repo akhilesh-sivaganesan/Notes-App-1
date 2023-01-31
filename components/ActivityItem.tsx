@@ -12,7 +12,7 @@ import { TrashIcon } from "@heroicons/react/24/outline";
 import { deleteActivity } from "../api/activity";
 import useAuth from "../hooks/useAuth";
 import { collection, onSnapshot, query, where } from 'firebase/firestore';
-import { db } from "../firebase";
+import { db } from "../firebase/index";
 import { useEffect } from "react";
 
 export default function ActivityItem(
@@ -78,12 +78,6 @@ export default function ActivityItem(
         <div>
             <Card sx={{ maxWidth: 345 }}>
                 <CardActionArea onClick={handleClick}>
-                    <CardMedia
-                        component="img"
-                        height="140"
-                        image="https://mui.com/static/images/cards/contemplative-reptile.jpg"
-                        alt="green iguana"
-                    />
                     <CardContent>
                         <Typography gutterBottom variant="h5" component="div">
                             {title}

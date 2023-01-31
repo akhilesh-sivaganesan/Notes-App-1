@@ -4,7 +4,7 @@ import XCirlceIcon from '@heroicons/react/24/outline/XCircleIcon'
 import { PlusCircleIcon } from "@heroicons/react/24/outline";
 
 
-export default ({ nestIndex, control, register }: any) => {
+export default function StepSet({ nestIndex, control, register }: any) {
   const { fields, remove, append } = useFieldArray({
     control,
     name: `actionList[${nestIndex}].actualSteps`

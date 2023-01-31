@@ -5,7 +5,7 @@ import { activityIDState, activityListState, activityModalState, activityState, 
 import { useRecoilState } from "recoil"
 import useAuth from "../hooks/useAuth";
 import { collection, onSnapshot, query, where } from 'firebase/firestore';
-import { db } from "../firebase";
+import { db } from "../firebase/index";
 import { useEffect } from "react";
 
 export default function SnapshotSet() {

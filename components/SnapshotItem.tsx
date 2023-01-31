@@ -37,12 +37,6 @@ export default function SnapshotItem(
         <div>
             <Card sx={{ maxWidth: 345 }}>
                 <CardActionArea onClick={handleClick}>
-                    <CardMedia
-                        component="img"
-                        height="140"
-                        image="https://mui.com/static/images/cards/contemplative-reptile.jpg"
-                        alt="green iguana"
-                    />
                     <CardContent>
                         <Typography gutterBottom variant="h5" component="div">
                             {time.toLocaleTimeString()}
