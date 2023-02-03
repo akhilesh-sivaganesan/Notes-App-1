@@ -61,3 +61,9 @@ export interface Step {
     id: number,
     content: string,
 }
+
+export interface Timer {
+    startTime: Date,
+    title: string,
+    expiryTimestamp: Date,
+}

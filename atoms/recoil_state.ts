@@ -1,6 +1,6 @@
 import { User } from 'firebase/auth';
 import { atom } from 'recoil';
-import {Snapshot, Todo, Activity, Action} from "../typings";
+import {Snapshot, Todo, Activity, Action, Timer} from "../typings";
 
 
 export const snapshotListState = atom({
@@ -71,4 +71,9 @@ export const activityReportModalState = atom({
 export const activityReportState = atom({
     key: "activityReportState",
     default: {} as Activity
+})
+
+export const timerListState = atom({
+    key: "timerListState",
+    default: [] as Timer[]
 })

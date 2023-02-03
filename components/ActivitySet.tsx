@@ -8,7 +8,7 @@ import { collection, onSnapshot, query, where } from 'firebase/firestore';
 import { db } from "../firebase/index";
 import { useEffect } from "react";
 
-export default function SnapshotSet() {
+export default function ActivitySet() {
     const [showActivityModal, setShowActivityModal] = useRecoilState<boolean>(activityModalState)
     const [activity, setActivity] = useRecoilState<Activity | null>(activityState)
     const [activityList, setActivityList] = useRecoilState<Activity[]>(activityListState)
