@@ -18,7 +18,10 @@ import { useRecoilState } from "recoil";
 import ActivityReport from "../components/ActivityReport";
 import useAuth from '../hooks/useAuth'
 import { ArrowLeftOnRectangleIcon } from "@heroicons/react/24/outline";
-import TimerSet from "../components/TimerSet";
+import TaskList from "../components/TaskList";
+import TaskSet from "../components/TaskSet";
+import TaskReportSet from "../components/TaskReportSet";
+import TaskReportModal from "../components/TaskReportModal";
 
 function a11yProps(index: number) {
   return {
@@ -94,7 +97,10 @@ export default function Home() {
             </Grid>
           </TabPanel>
           <TabPanel value={value} index={2}>
-            <TimerSet/>
+            <TaskList/>
+            <TaskSet/>
+            <TaskReportSet/>
+            <TaskReportModal/>
           </TabPanel>
         </Box>
       </Container>

@@ -72,7 +72,7 @@ export default function TodoList() {
             <h1 className="text-4xl">To Do List</h1>
             {
                 todoList.map(
-                    (t, i) => <TodoItem key={t.id} id={t.id} completion={t.completion} task={t.task} createdAt={t.createdAt} userId={t.userId} />
+                    (t, i) => <TodoItem key={t.createdAt.toLocaleTimeString()} id={t.id} completion={t.completion} task={t.task} createdAt={t.createdAt} userId={t.userId} />
                 )
             }
             <div>

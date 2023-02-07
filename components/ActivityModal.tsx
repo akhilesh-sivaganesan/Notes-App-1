@@ -26,7 +26,7 @@ function Modal() {
     const { user } = useAuth()
 
     const defaultValues = {
-        title: "",
+        title: activity?.title ?? "Default Title",
         notes: "",
         actionList: [
             {

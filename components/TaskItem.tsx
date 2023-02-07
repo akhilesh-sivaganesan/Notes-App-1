@@ -1,0 +1,149 @@
+import { Tag, Task, TaskAction, TaskListItem, TaskStep } from "../typings";
+import { Button, Checkbox, Grid, IconButton, TextField } from "@mui/material"
+import { useRecoilState } from "recoil";
+import { currentTaskState, taskListState, tasksState } from "../atoms/recoil_state";
+import Timer from "@mui/icons-material/Timer";
+import TimerOff from "@mui/icons-material/TimerOff";
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import DatePicker from "react-datepicker";
+import useAuth from "../hooks/useAuth";
+//import "react-datepicker/dist/react-datepicker.css";
+
+export default function TaskItem({ createdAt, userId, title, timed, minutesEstimate, dueDate, completed, tags }: TaskListItem) {
+
+    const [taskList, setTaskList] = useRecoilState(taskListState)
+    const [tasks, setTasks] = useRecoilState(tasksState)
+    const { user } = useAuth()
+    const [currentTask, setCurrentTask] = useRecoilState(currentTaskState)
+
+    function handleTaskChange(event: React.ChangeEvent<HTMLInputElement>) {
+        //replace the item in the todolist array that matches this current id
+        const taskObj = {
+            createdAt: createdAt,
+            userId: userId,
+            completed: completed,
+            title: event.target.value,
+            minutesEstimate: minutesEstimate,
+            dueDate: dueDate,
+            tags: tags,
+            timed: timed,
+        }
+        setTaskList(taskList.map(task => [taskObj].find(o => o.createdAt === task.createdAt) || task))
+    }
+
+    function handleStatusChange() {
+        const taskObj = {
+            createdAt: createdAt,
+            userId: userId,
+            completed: !completed,
+            title: title,
+            minutesEstimate: minutesEstimate,
+            dueDate: dueDate,
+            tags: tags,
+            timed: timed,
+        }
+
+        //toggleTodoStatus({ docId: createdAt.getTime(), completion: taskObj.completion })
+        setTaskList(taskList.map(task => [taskObj].find(o => o.createdAt === task.createdAt) || task))
+    }
+    async function handleDeletion() {
+        //await (deleteTodo(createdAt.getTime()))
+        setTaskList(taskList.filter(task => task.createdAt !== createdAt))
+    }
+    function handleEngagement() {
+        const time = new Date()
+        time.setMinutes(time.getMinutes() + (minutesEstimate ?? 0))
+        const taskComponentObj = {
+            createdAt: new Date(),
+            userId: user?.uid,
+            title: title,
+            description: "none from task item",
+            startTime: new Date(),
+            endTime: new Date(),
+            timed: timed,
+            expiryTimestamp: time,
+            minutesEstimate: minutesEstimate,
+            dueDate: dueDate,
+            completed: completed,
+            actions: [] as TaskAction[],
+            obstacles: "none from task item",
+            tags: tags,
+            showModal: false,
+        }
+        setTasks([...tasks, taskComponentObj as Task])
+        setCurrentTask(taskComponentObj)
+
+    }
+    function handleTimedChange() {
+        const taskObj = {
+            createdAt: createdAt,
+            userId: userId,
+            completed: completed,
+            title: title,
+            minutesEstimate: minutesEstimate,
+            dueDate: dueDate,
+            tags: tags,
+            timed: !timed,
+        }
+        setTaskList(taskList.map(task => [taskObj].find(o => o.createdAt === task.createdAt) || task))
+    }
+    function handleTimerChange(event: React.ChangeEvent<HTMLInputElement>) {
+        const taskObj = {
+            createdAt: createdAt,
+            userId: userId,
+            completed: completed,
+            title: title,
+            minutesEstimate: parseInt(event.target.value),
+            dueDate: dueDate,
+            tags: tags,
+            timed: timed,
+        }
+        setTaskList(taskList.map(task => [taskObj].find(o => o.createdAt === task.createdAt) || task))
+    }
+    function handleDateChange(date: Date | null) {
+        const taskObj = {
+            createdAt: createdAt,
+            userId: userId,
+            completed: completed,
+            title: title,
+            minutesEstimate: minutesEstimate,
+            dueDate: date ?? new Date(),
+            tags: tags,
+            timed: timed,
+        }
+        setTaskList(taskList.map(task => [taskObj].find(o => o.createdAt === task.createdAt) || task))
+    }
+    return (
+        <div className="flex flex-col space-y-2 bg-slate-800 p-4 rounded">
+            <div className="flex flex-row w-full space-x-3 justify-start items-center">
+                <IconButton onClick={handleDeletion}>
+                    <DeleteForeverIcon color="error" />
+                </IconButton>
+                <Checkbox color="success" onChange={handleStatusChange} checked={completed} />
+                <TextField label="Task" variant="standard" defaultValue={title} className="flex-grow" onChange={handleTaskChange} />
+
+
+            </div>
+
+
+
+            <div className="flex flex-row w-full space-x-3 justify-start items-center">
+                <Checkbox color="warning" onChange={handleTimedChange} checked={timed} icon={<TimerOff />} checkedIcon={<Timer />} />
+                {
+                    timed && <TextField label="Minutes" variant="standard" type="number" defaultValue={minutesEstimate} onChange={handleTimerChange} />
+
+                }
+                <Button color="success" variant="outlined" onClick={handleEngagement}>Start</Button>
+
+            </div>
+            <div>
+                <DatePicker
+                    onChange={(date) => handleDateChange(date)}
+                    selected={new Date(dueDate)}
+                    className="input w-full"
+                />
+            </div>
+        </div>
+
+    )
+}
