@@ -2,13 +2,15 @@ import CalendarIcon from "@heroicons/react/24/outline/CalendarIcon";
 import TrashIcon from "@heroicons/react/24/outline/TrashIcon";
 import Card from "@mui/material/Card";
 import CardActionArea from "@mui/material/CardActionArea";
+import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
+import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import { useRecoilState } from "recoil";
 import { currentTaskReportState, showTaskReportModalState, taskReportListState } from "../atoms/recoil_state";
 import { TaskReport } from "../typings";
 
-export default function TaskReportCard({startTime, endTime, actions, title, description, obstacles} : TaskReport) {
+export default function TaskReportCard({ startTime, endTime, actions, title, description, obstacles }: TaskReport) {
     const [taskReportList, setTaskReportList] = useRecoilState(taskReportListState)
     const [currentTaskReport, setCurrentTaskReport] = useRecoilState(currentTaskReportState)
     const [showTaskReport, setShowTaskReport] = useRecoilState(showTaskReportModalState)
@@ -22,12 +24,17 @@ export default function TaskReportCard({startTime, endTime, actions, title, desc
         setTaskReportList(taskReportList.filter(t => t.startTime !== startTime))
     }
 
-    
-    
+
+
     return (
         <div>
             <div>
-                <Card sx={{ maxWidth: 345 }}>
+                <Card style={{position: "relative"}}>
+                    <CardActions className="absolute top-0 right-0 z-10">
+                        <IconButton onClick={handleDelete}>
+                            <TrashIcon className="h-6 w-6" />
+                        </IconButton>
+                    </CardActions>
                     <CardActionArea onClick={handleClick}>
                         <CardContent>
                             <Typography gutterBottom variant="h5" component="div">
@@ -38,9 +45,14 @@ export default function TaskReportCard({startTime, endTime, actions, title, desc
                                 <CalendarIcon className="h-6 w-6 mr-2" />
                                 <Typography variant="body2" color="text.secondary">{startTime.toLocaleTimeString() + " - " + endTime.toLocaleTimeString()}</Typography>
                             </div>
-                            <TrashIcon className="absolute top-2 right-2 h-6 w-6" onClick={handleDelete}/>
+
                         </CardContent>
+
+
+
                     </CardActionArea>
+
+
                 </Card>
             </div>
 

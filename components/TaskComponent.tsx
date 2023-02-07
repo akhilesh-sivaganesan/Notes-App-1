@@ -55,7 +55,7 @@ export default function TaskComponent({ createdAt,
 
     function handleTaskEnd() {
         //Move task 
-        
+
         //Set task list to have this object completed
         const updatedTaskObj = {
             createdAt: createdAt,
@@ -90,44 +90,43 @@ export default function TaskComponent({ createdAt,
 
     return (
         <div>
-        
-
-                    <div className="flex flex-row border border-white p-5 space-x-5 h-[300px] min-w-min justify-around items-center">
-                        <div className="flex flex-col items-start space-y-5">
-                            <div className="flex flex-row space-x-2">
-                                {
-                                    /*TAGS*/
-                                    tags.map(
-                                        (t, i) => <TagComponent key={i} createdAt={t.createdAt} color={t.color} label={t.label} value={t.value} userId={t.userId} />
-                                    )
-                                }
-                            </div>
-                            <div>
-                                <h1 className="text-4xl">{title}</h1>
-                                <p>{description}</p>
-                            </div>
-                            <div className="flex flex-row space-x-2">
-                                <Button variant="outlined" color="success" onClick={handleTaskEdit}>Edit Details</Button>
-                                <Button variant="outlined" color="error" onClick={handleTaskEnd}>End Task</Button>
-                            </div>
 
 
-                        </div>
-                        <div>
-                            {
-                                timed ? 
-                                <TaskCountdown createdAt={createdAt} userId={userId} title={title} description={description} startTime={startTime} endTime={endTime} timed={timed} expiryTimestamp={expiryTimestamp} minutesEstimate={minutesEstimate} dueDate={dueDate} completed={completed} actions={actions} tags={tags} obstacles={obstacles} showModal={showModal}  />
-                                :
-                                <TaskStopwatch createdAt={createdAt} userId={userId} title={title} description={description} startTime={startTime} endTime={endTime} timed={timed} expiryTimestamp={expiryTimestamp} minutesEstimate={minutesEstimate} dueDate={dueDate} completed={completed} actions={actions} tags={tags} obstacles={obstacles} showModal={showModal}  />
-                            }
-                        </div>
+            <div className="flex flex-row border border-white p-5 space-x-5 h-[180px] min-w-min justify-around items-center rounded">
+                <div className="flex flex-col items-start space-y-2">
+                    <div className="flex flex-row space-x-2">
+                        {
+                            /*TAGS*/
+                            tags.map(
+                                (t, i) => <TagComponent key={i} createdAt={t.createdAt} color={t.color} label={t.label} value={t.value} userId={t.userId} />
+                            )
+                        }
+                    </div>
+                    <div>
+                        <h1 className="text-2xl">{title}</h1>
+                    </div>
+                    <div className="flex flex-row space-x-2">
+                        <Button size="small" variant="outlined" color="success" onClick={handleTaskEdit}>Edit</Button>
+                        <Button size="small" variant="outlined" color="error" onClick={handleTaskEnd}>End</Button>
                     </div>
 
-                
-                    
+
+                </div>
+                <div>
+                    {
+                        timed ?
+                            <TaskCountdown createdAt={createdAt} userId={userId} title={title} description={description} startTime={startTime} endTime={endTime} timed={timed} expiryTimestamp={expiryTimestamp} minutesEstimate={minutesEstimate} dueDate={dueDate} completed={completed} actions={actions} tags={tags} obstacles={obstacles} showModal={showModal} />
+                            :
+                            <TaskStopwatch createdAt={createdAt} userId={userId} title={title} description={description} startTime={startTime} endTime={endTime} timed={timed} expiryTimestamp={expiryTimestamp} minutesEstimate={minutesEstimate} dueDate={dueDate} completed={completed} actions={actions} tags={tags} obstacles={obstacles} showModal={showModal} />
+                    }
+                </div>
+            </div>
 
 
-            
+
+
+
+
             <TaskModal createdAt={createdAt} userId={userId} title={title} description={description} startTime={startTime} endTime={endTime} timed={timed} expiryTimestamp={expiryTimestamp} minutesEstimate={minutesEstimate} dueDate={dueDate} completed={completed} actions={actions} tags={tags} obstacles={obstacles} showModal={showModal} />
         </div>
     )

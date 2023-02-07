@@ -5,7 +5,8 @@ import TaskComponent from "./TaskComponent"
 export default function TaskSet() {
     const [tasks, setTasks] = useRecoilState(tasksState)
     return (
-        <div>
+        <div className="flex flex-col space-y-5 py-10">
+            <h1 className="text-4xl">Ongoing Tasks</h1>
             <Grid container spacing={1} className="my-4">
                 {
                     tasks.map(
@@ -13,7 +14,7 @@ export default function TaskSet() {
 
 
                             !t.completed ?
-                                <Grid item xs={9} md={4} key={i}>
+                                <Grid item xs={9} md={6} key={i}>
                                     <TaskComponent key={i}
                                         createdAt={t.createdAt}
                                         title={t.title}

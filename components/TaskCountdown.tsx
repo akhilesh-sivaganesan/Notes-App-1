@@ -34,7 +34,7 @@ export default function TaskCountdown({
         }
         return (
             <div className="flex flex-col justify-center items-center">
-                <h1 className="text-3xl">{finalTime}</h1>
+                <h1 className="text-2xl">{finalTime}</h1>
                 <div className='flex flex-row justify-center items-center'>
                     {isPlaying ? <PauseCircleIcon className="h-6 w-6" onClick={() => setIsPlaying(!isPlaying)}></PauseCircleIcon> :
                         <PlayCircleIcon className="h-6 w-6" onClick={() => setIsPlaying(!isPlaying)}></PlayCircleIcon>
@@ -46,13 +46,16 @@ export default function TaskCountdown({
     };
 
     const [isPlaying, setIsPlaying] = useState(true)
-    const [duration, setDuration] = useState(10)
+    const [duration, setDuration] = useState(30)
     const [tasks, setTasks] = useRecoilState(tasksState)
     const [taskReportList, setTaskReportList] = useRecoilState(taskReportListState)
 
     useEffect(() => {
-        setDuration(expiryTimestamp.getMinutes() * 60 - new Date().getMinutes() * 60)
+        const difference = expiryTimestamp.getTime() - new Date().getTime();
+        setDuration(difference/60000 * 60)
+
     }, [])
+
 
     function handleTaskEnd() {
         //Move task 
@@ -89,8 +92,6 @@ export default function TaskCountdown({
         setTaskReportList([...taskReportList, taskReportObj as TaskReport])
     }
 
-
-
     return (
 
         <div>
@@ -102,6 +103,8 @@ export default function TaskCountdown({
                 colors={['#50C878', '#FFC300', '#F39700', '#A30000']}
                 colorsTime={[Math.floor(duration / 4 * 3), Math.floor(duration / 4 * 2), Math.floor(duration / 4 * 1), 0]}
                 onComplete={handleTaskEnd}
+                size={150}
+                strokeLinecap="square"
             >
                 {renderTime}
             </CountdownCircleTimer>

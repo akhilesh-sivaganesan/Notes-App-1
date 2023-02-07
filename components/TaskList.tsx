@@ -5,12 +5,18 @@ import { tagListState, taskListState } from "../atoms/recoil_state";
 import { Tag, TaskFormInputs, TaskListItem } from "../typings";
 import TaskItem from "./TaskItem";
 import useAuth from '../hooks/useAuth';
-import Select from "react-select";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+import Select, { StylesConfig } from "react-select";
+//import DatePicker from "react-datepicker";
+//import "react-datepicker/dist/react-datepicker.css";
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+
+
 import makeAnimated from 'react-select/animated';
 import Timer from "@mui/icons-material/Timer";
 import TimerOff from "@mui/icons-material/TimerOff";
+import chroma from 'chroma-js';
 
 
 
@@ -25,7 +31,7 @@ export default function TaskList() {
         tags: [],
         dueDate: new Date()
     }
-    const { register, handleSubmit, reset, control, formState: { errors } } = useForm<TaskFormInputs>({defaultValues});
+    const { register, handleSubmit, reset, control, formState: { errors } } = useForm<TaskFormInputs>({ defaultValues });
     const { user } = useAuth()
 
     const onSubmit: SubmitHandler<TaskFormInputs> = async (data) => {
@@ -34,39 +40,98 @@ export default function TaskList() {
         taskListItemObj.userId = user?.uid
         taskListItemObj.completed = false;
         taskListItemObj.minutesEstimate = 7,
-        setTaskList([...taskList, taskListItemObj as TaskListItem])
+            setTaskList([...taskList, taskListItemObj as TaskListItem])
     }
+
+
+    const colourStyles: StylesConfig<Tag, true> = {
+        control: (styles) => ({ ...styles, backgroundColor: 'black' }),
+        option: (styles, { data, isDisabled, isFocused, isSelected }) => {
+            const color = chroma(data.color);
+            return {
+                ...styles,
+                backgroundColor: isDisabled
+                    ? undefined
+                    : isSelected
+                        ? data.color
+                        : isFocused
+                            ? color.alpha(0.1).css()
+                            : undefined,
+                color: isDisabled
+                    ? '#ccc'
+                    : isSelected
+                        ? chroma.contrast(color, 'white') > 2
+                            ? 'white'
+                            : 'black'
+                        : data.color,
+                cursor: isDisabled ? 'not-allowed' : 'default',
+
+                ':active': {
+                    ...styles[':active'],
+                    backgroundColor: !isDisabled
+                        ? isSelected
+                            ? data.color
+                            : color.alpha(0.3).css()
+                        : undefined,
+                },
+            };
+        },
+        multiValue: (styles, { data }) => {
+            const color = chroma(data.color);
+            return {
+                ...styles,
+                backgroundColor: color.alpha(0.1).css(),
+            };
+        },
+        multiValueLabel: (styles, { data }) => ({
+            ...styles,
+            color: data.color,
+        }),
+        multiValueRemove: (styles, { data }) => ({
+            ...styles,
+            color: data.color,
+            ':hover': {
+                backgroundColor: data.color,
+                color: 'white',
+            },
+        }),
+    };
+
 
     return (
         <div className="flex flex-col md:items-left items-left py-10 space-y-8">
             <h1 className="text-4xl">Task List</h1>
-            <div className="flex flex-col items-start space-y-8">
+            <div className="flex flex-col items-start space-y-5">
                 {
                     taskList.map(
                         (t, i) => <TaskItem key={t.createdAt.toLocaleTimeString()}
-                                            createdAt={t.createdAt}
-                                            title={t.title}
-                                            timed={t.timed}
-                                            minutesEstimate={t.minutesEstimate}
-                                            dueDate={t.dueDate}
-                                            completed={t.completed}
-                                            tags={t.tags}
-                                            userId={t.userId}
-                                    />
+                            createdAt={t.createdAt}
+                            title={t.title}
+                            timed={t.timed}
+                            minutesEstimate={t.minutesEstimate}
+                            dueDate={t.dueDate}
+                            completed={t.completed}
+                            tags={t.tags}
+                            userId={t.userId}
+                        />
                     )
                 }
             </div>
-            
-            <div>
+
+            <div className="border border-white w-full p-4 bg-slate-800">
                 <form className="flex flex-col flex-wrap space-x-2 space-y-5 justify-start max-w-sm" onSubmit={handleSubmit(onSubmit)}>
+
                     <div className="flex flex-row items-center">
-                        <Checkbox color="warning" defaultChecked={false} icon={<TimerOff/>} checkedIcon={<Timer/>} {...register('timed', { required: false })} />
-                        <label>Timed</label>
+                        <Checkbox color="warning" defaultChecked={false} icon={<TimerOff />} checkedIcon={<Timer />} {...register('timed', { required: false })} />
+
+                        <TextField
+                            {...register('title', { required: true })}
+                            placeholder="Enter Task"
+                            className="w-full"
+                        />
                     </div>
-                    <TextField
-                        {...register('title', { required: true })}
-                        placeholder="Enter Task"
-                    />
+
+
                     <Controller
                         {...register('tags', { required: true })}
                         control={control}
@@ -80,24 +145,35 @@ export default function TaskList() {
                                 isMulti
                                 defaultValue={[tagList[0], tagList[1]]}
                                 closeMenuOnSelect={false}
+                                styles={colourStyles}
+
                             />
                         )}
                     />
+
+                    <div className="flex flex-row space-x-1 items-center">
                     <Controller
                         control={control}
                         {...register('dueDate', { required: true })}
                         render={({ field }) => (
-                            <DatePicker
-                                className="input"
-                                placeholderText="Select Due Date"
-                                onChange={(e : any) => field.onChange(e)}
-                                selected={field.value}
-                            />
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+
+                                <DatePicker
+                                    className="max-w-[160px]"
+                                    onChange={(e: any) => field.onChange(e)}
+                                    value={field.value ?? new Date()}
+                                    renderInput={(props) => <TextField {...props} />}
+                                />
+                            </LocalizationProvider>
                         )}
                     />
 
 
+
                     <Button type="submit" variant="outlined" value="Submit">Submit</Button>
+
+                    </div>
+                   
 
 
                 </form>

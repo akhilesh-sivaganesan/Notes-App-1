@@ -97,10 +97,20 @@ export default function Home() {
             </Grid>
           </TabPanel>
           <TabPanel value={value} index={2}>
-            <TaskList/>
-            <TaskSet/>
-            <TaskReportSet/>
-            <TaskReportModal/>
+
+            <Grid container spacing={4}>
+              <Grid item xs={12} md={4}>
+                <TaskList />
+              </Grid>
+              <Grid item xs={12} md={8}>
+                <TaskSet />
+                <TaskReportSet />
+                <TaskReportModal />
+              </Grid>
+            </Grid>
+
+
+
           </TabPanel>
         </Box>
       </Container>

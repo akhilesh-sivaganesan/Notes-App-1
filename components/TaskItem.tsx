@@ -5,8 +5,10 @@ import { currentTaskState, taskListState, tasksState } from "../atoms/recoil_sta
 import Timer from "@mui/icons-material/Timer";
 import TimerOff from "@mui/icons-material/TimerOff";
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import DatePicker from "react-datepicker";
 import useAuth from "../hooks/useAuth";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 //import "react-datepicker/dist/react-datepicker.css";
 
 export default function TaskItem({ createdAt, userId, title, timed, minutesEstimate, dueDate, completed, tags }: TaskListItem) {
@@ -114,35 +116,35 @@ export default function TaskItem({ createdAt, userId, title, timed, minutesEstim
         setTaskList(taskList.map(task => [taskObj].find(o => o.createdAt === task.createdAt) || task))
     }
     return (
-        <div className="flex flex-col space-y-2 bg-slate-800 p-4 rounded">
-            <div className="flex flex-row w-full space-x-3 justify-start items-center">
-                <IconButton onClick={handleDeletion}>
-                    <DeleteForeverIcon color="error" />
-                </IconButton>
+        <div className="relative space-y-2 bg-slate-800 p-3 rounded w-full">
+            <IconButton onClick={handleDeletion} className="!absolute top-2 right-2 z-10">
+                <DeleteForeverIcon color="error" />
+            </IconButton>
+            <div className="flex flex-row w-full justify-start items-center">
                 <Checkbox color="success" onChange={handleStatusChange} checked={completed} />
-                <TextField label="Task" variant="standard" defaultValue={title} className="flex-grow" onChange={handleTaskChange} />
-
-
+                <TextField variant="standard" defaultValue={title} placeholder="Enter Task" className="flex-grow" onChange={handleTaskChange} />
             </div>
 
 
 
             <div className="flex flex-row w-full space-x-3 justify-start items-center">
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DatePicker
+                        className="max-w-[160px]"
+                        onChange={(date) => handleDateChange(date)}
+                        value={new Date(dueDate)}
+                        renderInput={(props) => <TextField {...props} />}
+                    />
+                </LocalizationProvider>
                 <Checkbox color="warning" onChange={handleTimedChange} checked={timed} icon={<TimerOff />} checkedIcon={<Timer />} />
                 {
-                    timed && <TextField label="Minutes" variant="standard" type="number" defaultValue={minutesEstimate} onChange={handleTimerChange} />
+                    timed && <TextField label="Min" variant="standard" className="w-[60px]" type="number" defaultValue={minutesEstimate} onChange={handleTimerChange} />
 
                 }
                 <Button color="success" variant="outlined" onClick={handleEngagement}>Start</Button>
 
             </div>
-            <div>
-                <DatePicker
-                    onChange={(date) => handleDateChange(date)}
-                    selected={new Date(dueDate)}
-                    className="input w-full"
-                />
-            </div>
+
         </div>
 
     )
