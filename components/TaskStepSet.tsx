@@ -2,7 +2,8 @@ import React from "react";
 import { useFieldArray } from "react-hook-form";
 import XCirlceIcon from '@heroicons/react/24/outline/XCircleIcon'
 import { PlusCircleIcon } from "@heroicons/react/24/outline";
-
+import { TaskStep } from "../typings";
+import useAuth from "../hooks/useAuth";
 
 export default function TaskStepSet({ nestIndex, control, register }: any) {
   const { fields, remove, append } = useFieldArray({
@@ -10,6 +11,7 @@ export default function TaskStepSet({ nestIndex, control, register }: any) {
     name: `actions[${nestIndex}].steps`
   });
 
+  const {user} = useAuth();
   return (
     <div className="space-y-4 ml-3">
       {fields.map((item, k) => 
@@ -35,8 +37,11 @@ export default function TaskStepSet({ nestIndex, control, register }: any) {
         type="button"
         onClick={() =>
           append({
-            content: "",
-          })
+            title: "",
+            startTime: new Date(),
+            endTime: new Date(),
+            userId: user?.uid,
+          } as TaskStep)
         }
         className="flex flex-row space-x-1 items-center"
       >

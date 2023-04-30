@@ -141,4 +141,5 @@ export interface TaskReport {
     description: string,
     actions: TaskAction[],
     obstacles: string,
+    userId: String | undefined,
 }

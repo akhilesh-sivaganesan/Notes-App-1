@@ -9,14 +9,14 @@ import useAuth from "../hooks/useAuth";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { addTaskListItem, deleteTaskListItem } from "../api/tasklist";
 //import "react-datepicker/dist/react-datepicker.css";
-
+import { addTask } from "../api/tasks";
 export default function TaskItem({ createdAt, userId, title, timed, minutesEstimate, dueDate, completed, tags }: TaskListItem) {
 
     const [taskList, setTaskList] = useRecoilState(taskListState)
     const [tasks, setTasks] = useRecoilState(tasksState)
     const { user } = useAuth()
-    const [currentTask, setCurrentTask] = useRecoilState(currentTaskState)
 
     function handleTaskChange(event: React.ChangeEvent<HTMLInputElement>) {
         //replace the item in the todolist array that matches this current id
@@ -31,6 +31,7 @@ export default function TaskItem({ createdAt, userId, title, timed, minutesEstim
             timed: timed,
         }
         setTaskList(taskList.map(task => [taskObj].find(o => o.createdAt === task.createdAt) || task))
+        addTaskListItem(taskObj)
     }
 
     function handleStatusChange() {
@@ -47,9 +48,11 @@ export default function TaskItem({ createdAt, userId, title, timed, minutesEstim
 
         //toggleTodoStatus({ docId: createdAt.getTime(), completion: taskObj.completion })
         setTaskList(taskList.map(task => [taskObj].find(o => o.createdAt === task.createdAt) || task))
+        addTaskListItem(taskObj)
+
     }
     async function handleDeletion() {
-        //await (deleteTodo(createdAt.getTime()))
+        await (deleteTaskListItem(createdAt.getTime() + ""))
         setTaskList(taskList.filter(task => task.createdAt !== createdAt))
     }
     function handleEngagement() {
@@ -72,8 +75,8 @@ export default function TaskItem({ createdAt, userId, title, timed, minutesEstim
             tags: tags,
             showModal: false,
         }
+        addTask(taskComponentObj)
         setTasks([...tasks, taskComponentObj as Task])
-        setCurrentTask(taskComponentObj)
 
     }
     function handleTimedChange() {
@@ -88,6 +91,7 @@ export default function TaskItem({ createdAt, userId, title, timed, minutesEstim
             timed: !timed,
         }
         setTaskList(taskList.map(task => [taskObj].find(o => o.createdAt === task.createdAt) || task))
+        addTaskListItem(taskObj)
     }
     function handleTimerChange(event: React.ChangeEvent<HTMLInputElement>) {
         const taskObj = {
@@ -101,6 +105,7 @@ export default function TaskItem({ createdAt, userId, title, timed, minutesEstim
             timed: timed,
         }
         setTaskList(taskList.map(task => [taskObj].find(o => o.createdAt === task.createdAt) || task))
+        addTaskListItem(taskObj)
     }
     function handleDateChange(date: Date | null) {
         const taskObj = {
@@ -114,6 +119,7 @@ export default function TaskItem({ createdAt, userId, title, timed, minutesEstim
             timed: timed,
         }
         setTaskList(taskList.map(task => [taskObj].find(o => o.createdAt === task.createdAt) || task))
+        addTaskListItem(taskObj)
     }
     return (
         <div className="relative space-y-2 bg-slate-800 p-3 rounded w-full">

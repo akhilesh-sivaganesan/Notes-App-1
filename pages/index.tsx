@@ -22,6 +22,7 @@ import TaskList from "../components/TaskList";
 import TaskSet from "../components/TaskSet";
 import TaskReportSet from "../components/TaskReportSet";
 import TaskReportModal from "../components/TaskReportModal";
+import Time from "../components/Time";
 
 function a11yProps(index: number) {
   return {
@@ -53,9 +54,8 @@ export default function Home() {
         <Box sx={{ width: '100%' }}>
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }} className="flex flex-row items-center justify-between">
             <Tabs value={value} onChange={handleChange} aria-label="basic tabs example" >
-              <Tab label="Activity Log" {...a11yProps(0)} />
-              <Tab label="Structured Journal" {...a11yProps(1)} />
-              <Tab label="Current Queue" {...a11yProps(2)} />
+              <Tab label="Time" {...a11yProps(0)} />
+              <Tab label="Current Queue" {...a11yProps(1)} />
             </Tabs>
             <div className="flex flex-row space-x-2 items-center">
               <Button onClick={logout}>
@@ -68,35 +68,21 @@ export default function Home() {
               <Typography variant="body2">{user?.email}</Typography>
             </div>
           </Box>
+
           <TabPanel value={value} index={0}>
+
             <Grid container spacing={4}>
-              <Grid item xs={12} md={4}>
-                <TodoList />
+              <Grid item xs={12} md={12}>
+                <Time />
               </Grid>
-              <Grid item xs={12} md={8}>
-                <ActivitySet />
-              </Grid>
-              <Grid item xs={12} md={6}>
-                {showActivityModal && <ActivityModal />}
-                {showActivityReportModal && <ActivityReport />}
-              </Grid>
+
             </Grid>
 
+
+
           </TabPanel>
+
           <TabPanel value={value} index={1}>
-            <Grid container spacing={4}>
-              <Grid item xs={12} md={4}>
-                <Form />
-              </Grid>
-              <Grid item xs={12} md={8}>
-                <SnapshotSet />
-              </Grid>
-              <Grid item xs={12} md={6}>
-                {showModal && <SnapshotModal />}
-              </Grid>
-            </Grid>
-          </TabPanel>
-          <TabPanel value={value} index={2}>
 
             <Grid container spacing={4}>
               <Grid item xs={12} md={4}>

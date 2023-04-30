@@ -2,7 +2,7 @@ import { Button, Checkbox, TextField } from "@mui/material";
 import { SubmitHandler, useForm, Controller } from "react-hook-form";
 import { useRecoilState } from "recoil";
 import { tagListState, taskListState } from "../atoms/recoil_state";
-import { Tag, TaskFormInputs, TaskListItem } from "../typings";
+import { Tag, TaskFormInputs, TaskListItem, Todo } from "../typings";
 import TaskItem from "./TaskItem";
 import useAuth from '../hooks/useAuth';
 import Select, { StylesConfig } from "react-select";
@@ -17,6 +17,11 @@ import makeAnimated from 'react-select/animated';
 import Timer from "@mui/icons-material/Timer";
 import TimerOff from "@mui/icons-material/TimerOff";
 import chroma from 'chroma-js';
+import { addTaskListItem } from "../api/tasklist";
+import { useEffect } from "react";
+
+import { collection, onSnapshot, query, Timestamp, where } from 'firebase/firestore';
+import { db } from "../firebase/index";
 
 
 
@@ -36,12 +41,43 @@ export default function TaskList() {
 
     const onSubmit: SubmitHandler<TaskFormInputs> = async (data) => {
         const taskListItemObj = JSON.parse(JSON.stringify(data))
+        taskListItemObj.dueDate = new Date(taskListItemObj.dueDate)
         taskListItemObj.createdAt = new Date();
         taskListItemObj.userId = user?.uid
         taskListItemObj.completed = false;
-        taskListItemObj.minutesEstimate = 7,
-            setTaskList([...taskList, taskListItemObj as TaskListItem])
+        taskListItemObj.minutesEstimate = 7
+        setTaskList([...taskList, taskListItemObj as TaskListItem])
+        addTaskListItem(taskListItemObj as TaskListItem)
     }
+
+    const refreshData = () => {
+        if (!user) {
+          setTaskList([]);
+          return;
+        }
+        const q = query(collection(db, "tasklist"), where("userId", "==", user.uid));
+    
+        onSnapshot(q, (querySnapchot) => {
+          let ar = [] as TaskListItem[];
+          querySnapchot.docs.forEach((doc) => {
+            ar.push({
+                createdAt: doc.data().createdAt.toDate(),
+                userId: doc.data().userId,
+                title: doc.data().title,
+                timed: doc.data().timed,
+                minutesEstimate: doc.data().minutesEstimate,
+                dueDate: doc.data().dueDate.toDate(),
+                completed: doc.data().completed,
+                tags: doc.data().tags,
+            });
+          });
+          setTaskList(ar);
+        });
+      };
+    
+      useEffect(() => {
+        refreshData();
+      }, [user]);
 
 
     const colourStyles: StylesConfig<Tag, true> = {

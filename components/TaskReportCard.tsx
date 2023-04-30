@@ -7,6 +7,7 @@ import CardContent from "@mui/material/CardContent";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import { useRecoilState } from "recoil";
+import { deleteTaskReport } from "../api/taskreportlist";
 import { currentTaskReportState, showTaskReportModalState, taskReportListState } from "../atoms/recoil_state";
 import { TaskReport } from "../typings";
 
@@ -21,6 +22,7 @@ export default function TaskReportCard({ startTime, endTime, actions, title, des
 
 
     async function handleDelete() {
+        await deleteTaskReport(startTime.getTime() + "")
         setTaskReportList(taskReportList.filter(t => t.startTime !== startTime))
     }
 

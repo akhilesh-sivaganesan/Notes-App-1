@@ -6,6 +6,8 @@ import TagComponent from "./TagComponent";
 import TaskModal from "./TaskModal";
 import TaskCountdown from "./TaskCountdown";
 import TaskStopwatch from "./TaskStopwatch";
+import { addTask, deleteTask } from "../api/tasks";
+import { addTaskReport } from "../api/taskreportlist";
 
 
 export default function TaskComponent({ createdAt,
@@ -51,6 +53,7 @@ export default function TaskComponent({ createdAt,
             showModal: true,
         }
         setTasks(tasks.map(task => [updatedTaskObj].find(o => o.createdAt === task.createdAt) || task))
+        addTask(updatedTaskObj)
     }
 
     function handleTaskEnd() {
@@ -75,6 +78,8 @@ export default function TaskComponent({ createdAt,
             showModal: showModal,
         }
         setTasks(tasks.map(task => [updatedTaskObj].find(o => o.createdAt === task.createdAt) || task))
+        //addTask(updatedTaskObj)
+        deleteTask(createdAt.getTime() + "")
 
         const taskReportObj = {
             startTime: startTime,
@@ -83,9 +88,11 @@ export default function TaskComponent({ createdAt,
             description: description,
             actions: actions,
             obstacles: obstacles,
+            userId: userId,
         }
         //Add task report obj
         setTaskReportList([...taskReportList, taskReportObj as TaskReport])
+        addTaskReport(taskReportObj)
     }
 
     return (
